@@ -1,0 +1,22 @@
+ul li {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.nav-link-hover li {
+  @apply hover:text-custom-secondary;
+}
+
+ul li:hover svg,
+ul li:hover {
+  transform: scale(1.1);
+  transition: transform 0.3s ease;
+}
+
+.nav-lg-screen-cl {
+  @apply md:flex md:justify-center md:items-center md:gap-2;
+}
+
+.nav-mobile-cl {
+  @apply absolute bg-custom-primary flex flex-col gap-2 pt-6  px-6 h-[90vh] w-[30vw];
+}
