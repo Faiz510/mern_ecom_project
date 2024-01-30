@@ -1,0 +1,11 @@
+.flex-cl {
+  @apply flex justify-center items-center;
+}
+
+.angle-btn-cl {
+  @apply cursor-pointer bg-white opacity-40 p-6 rounded-full  hover:opacity-100;
+}
+
+.btn-cl {
+  @apply border border-black rounded-lg px-4 py-1 tracking-wider hover:text-white hover:bg-custom-secondary  hover:border-none hover:shadow-2xl shadow-custom-secondary;
+}

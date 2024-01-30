@@ -10,6 +10,9 @@ export default {
           secondary: "#fac423",
         },
       },
+      fontFamily: {
+        body: ["Poppins"],
+      },
     },
   },
   plugins: [],
