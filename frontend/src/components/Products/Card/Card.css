@@ -1,0 +1,10 @@
+.price-color {
+  color: #cf292b;
+}
+.price-bg-color {
+  background-color: #cf292b;
+}
+
+.card-icon {
+  @apply text-custom-secondary cursor-pointer font-semibold text-4xl;
+}

@@ -7,3 +7,10 @@
 body {
   font-family: "popins";
 }
+
+.flex-justify-center {
+  @apply flex justify-center items-center;
+}
+.flex-justify-btw {
+  @apply flex justify-between items-center w-full;
+}
