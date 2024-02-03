@@ -6,7 +6,8 @@ import { useFetchData } from "../../Hooks/useFetchData.tsx";
 const Products = () => {
   // fetchResquest
   const parseFunctionData = (data: any) => data as ProductData;
-  const fetchUrl = "https://dummyjson.com/products?limit=1";
+
+  const fetchUrl = "https://dummyjson.com/products?limit=3";
   const { responseData, fetchLoading } = useFetchData<ProductData>(
     `${fetchUrl}`,
     {

@@ -1,7 +1,7 @@
 import { motion, useTransform, useScroll } from "framer-motion";
 import { useEffect, useState } from "react";
 import "./HeroSection.css";
-import AngleBtns from "./AngleBtns";
+import AngleBtns from "./AngleBtns.tsx";
 import { ANIMATION_VARIANTS } from "./Animate.tsx";
 
 const HeroArr = [
