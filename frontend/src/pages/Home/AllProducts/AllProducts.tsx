@@ -8,15 +8,8 @@ const AllProducts = () => {
 
   return (
     <motion.div
-      //   initial={{ opacity: 0, translateY: -200 }}
-      //   whileInView={{
-      //     opacity: 1,
-      //     translateY: 0,
-      //     transition: { duration: 0.3 },
-      //   }}
-      initial={{ opacity: 0, x: -500 }}
+      initial={{ opacity: 0, x: -200 }}
       whileInView={{ opacity: 1, transition: { duration: 0.5 }, x: 0 }}
-      //   style={{ opacity: scrollOp }}
     >
       <div className="text-center my-10 ">
         <h3 className="text-4xl tracking-wider font-medium py-2 md:text-6xl opacity-90">

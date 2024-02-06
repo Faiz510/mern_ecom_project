@@ -1,0 +1,15 @@
+.icon-box-cl {
+  @apply flex gap-4 items-center justify-center px-4;
+}
+
+.icon-box-cl svg {
+  @apply text-8xl text-custom-secondary md:text-[10rem];
+}
+
+.icon-box-cl span {
+  @apply text-[1rem] font-thin tracking-wider opacity-70 leading-3;
+}
+
+.icon-box-cl h3 {
+  @apply text-[1.2rem] font-semibold tracking-wider opacity-90 mb-3;
+}
