@@ -1,0 +1,27 @@
+footer ul li {
+  @apply my-[2px] font-light text-black/80;
+}
+
+.footer-col-h {
+  @apply text-2xl font-normal tracking-wide;
+}
+
+.socail-icons svg {
+  @apply text-2xl opacity-85;
+}
+
+.contact-info-inner-cl {
+  @apply flex  items-center gap-2 my-[2px];
+}
+
+.contact-info-inner-cl span {
+  @apply font-thin opacity-70;
+}
+
+.contact-info-inner-cl svg {
+  @apply font-thin text-[1.2rem] opacity-90;
+}
+
+a {
+  @apply hover:text-custom-secondary transition-all duration-200 hover:scale-110;
+}

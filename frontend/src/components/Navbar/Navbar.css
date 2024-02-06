@@ -7,8 +7,8 @@ ul li {
   @apply hover:text-custom-secondary;
 }
 
-ul li:hover svg,
-ul li:hover {
+nav ul li:hover svg,
+nav ul li:hover {
   transform: scale(1.1);
   transition: transform 0.3s ease;
 }
