@@ -11,7 +11,7 @@ import {
 import "./Navbar.css";
 import { motion } from "framer-motion";
 import { useMediaQuery } from "react-responsive";
-import Overlay from "./Overlay";
+import Overlay from "../Overlay";
 
 const Navbar = () => {
   const [showNav, setShowNav] = useState<boolean>(false);
