@@ -1,0 +1,22 @@
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  appearance: textfield;
+  margin: 0;
+}
+
+.sharing-icons span svg {
+  @apply text-2xl cursor-pointer;
+}
+
+.sharing-icons span svg:hover {
+  @apply transition-all duration-300 opacity-60;
+}

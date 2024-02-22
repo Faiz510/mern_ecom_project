@@ -8,6 +8,9 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+# Ignore QuickSearch directory
+frontend/src/components/QuickSearch/
+
 dist
 dist-ssr
 note.txt

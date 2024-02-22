@@ -4,12 +4,14 @@ import RatingStar from "./RatingStar.tsx";
 import { CardProps } from "../../Types.tsx";
 import CardIcons from "./CardIcons.tsx";
 import CardBgOverlay from "./CardBgOverlay.tsx";
+import { NavLink } from "react-router-dom";
 
 const Card: React.FC<CardProps> = (props) => {
   const { id, title, img, price, discountPercentage, rating, category } = props;
 
   return (
-    <div
+    <NavLink
+      to={`/products/${id}`}
       key={id}
       className="w-[300px] bg-custom-primary rounded cursor-pointer relative group overflow-hidden transition-all duration-300 group-hover:shadow-lg"
     >
@@ -43,7 +45,7 @@ const Card: React.FC<CardProps> = (props) => {
       <CardIcons />
 
       <CardBgOverlay />
-    </div>
+    </NavLink>
   );
 };
 
