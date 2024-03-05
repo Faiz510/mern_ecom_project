@@ -20,22 +20,26 @@ const Products = () => {
   );
 
   return (
-    <section className="grid grid-cols-1 w-[50vw] md:grid-cols-2 md:w-[70vw] lg:grid-cols-3 lg:w-[90vw] mx-auto gap-5 sm:gap-8 md:mx-[8rem] lg:mx-[6vw] md:pl-4 lg:pl-8">
-      {!fetchLoading ? (
-        responseData?.products?.map((product) => (
-          <Card
-            title={product.title}
-            img={product.thumbnail}
-            price={product.price}
-            discountPercentage={product.discountPercentage}
-            rating={product.rating}
-            category={product.category}
-            id={product.id}
-          />
-        ))
-      ) : (
-        <Loader />
-      )}
+    <section className="flex justify-center items-center">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {!fetchLoading ? (
+          responseData?.products?.map((product) => (
+            <Card
+              title={product.title}
+              img={product.thumbnail}
+              price={product.price}
+              discountPercentage={product.discountPercentage}
+              rating={product.rating}
+              category={product.category}
+              id={product.id}
+              cardList={false}
+              description={product.description}
+            />
+          ))
+        ) : (
+          <Loader />
+        )}
+      </div>
     </section>
   );
 };

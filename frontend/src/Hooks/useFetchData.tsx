@@ -17,6 +17,7 @@ export const useFetchData = <T,>(
   useEffect(() => {
     const fetchApiFunction = async () => {
       try {
+        setFetchError("");
         setFetchLoading(true);
         const response: AxiosResponse<ApiResponse<T>> = await axios.get(url);
 
@@ -37,3 +38,5 @@ export const useFetchData = <T,>(
 
   return { responseData, fetchLoading, setFetchLoading, fetchError };
 };
+
+// export const useFetch

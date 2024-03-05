@@ -1,25 +1,47 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Card.css";
 import RatingStar from "./RatingStar.tsx";
 import { CardProps } from "../../Types.tsx";
 import CardIcons from "./CardIcons.tsx";
 import CardBgOverlay from "./CardBgOverlay.tsx";
-import { NavLink } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 const Card: React.FC<CardProps> = (props) => {
-  const { id, title, img, price, discountPercentage, rating, category } = props;
+  const {
+    id,
+    title,
+    img,
+    price,
+    discountPercentage,
+    rating,
+    category,
+    cardList,
+    description,
+  } = props;
+
+  const [searchParams, setSearchParams] = useSearchParams(); // to get searchParams from url
 
   return (
-    <NavLink
+    <Link
       to={`/products/${id}`}
+      relative="path"
       key={id}
-      className="w-[300px] bg-custom-primary rounded cursor-pointer relative group overflow-hidden transition-all duration-300 group-hover:shadow-lg"
+      className={`${
+        cardList
+          ? "w-[80%] flex flex-col items-center h-[500px] md:h-[250px] md:flex-row gap-2 mx-auto"
+          : "w-[300px]"
+      }  bg-custom-primary rounded cursor-pointer relative group overflow-hidden transition-all duration-300 group-hover:shadow-lg `}
+      state={{ search: searchParams.toString() }}
     >
-      <img
-        src={`${img}`}
-        alt={`${title}`}
-        className="w-full h-[220px] object-cover rounded"
-      />
+      <div className="w-[500px]">
+        <img
+          src={`${img}`}
+          alt={`${title}`}
+          className={`${
+            cardList ? "w-full" : "w-[400px]"
+          } h-[250px] object-cover rounded`}
+        />
+      </div>
 
       <div className="p-3">
         <h3 className="font-semibold tracking-wider text-custom-secondary">
@@ -40,12 +62,22 @@ const Card: React.FC<CardProps> = (props) => {
             {discountPercentage.toFixed(0)} %
           </span>
         </div>
+
+        <div className="mt-4 text-custom-font_primary px-2">
+          <p>
+            {cardList
+              ? description.length > 100
+                ? `${description.slice(0, 100)}...`
+                : description
+              : ""}
+          </p>
+        </div>
       </div>
 
       <CardIcons />
 
       <CardBgOverlay />
-    </NavLink>
+    </Link>
   );
 };
 

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import "./HeroSection.css";
 import AngleBtns from "./AngleBtns.tsx";
 import { ANIMATION_VARIANTS } from "./Animate.tsx";
+import { Link } from "react-router-dom";
 
 const HeroArr = [
   {
@@ -94,12 +95,14 @@ const HeroSection = () => {
         </motion.li>
 
         <div>
-          <motion.button
-            className="btn-cl"
+          <motion.div
             whileHover={ANIMATION_VARIANTS.AnimateWithHover}
+            className="w-[7.5rem] text-center"
           >
-            Shop Now
-          </motion.button>
+            <Link to={"/products"} className="btn-cl">
+              Shop Now
+            </Link>
+          </motion.div>
         </div>
       </motion.ul>
       <AngleBtns setAngle={setAngleBtnVal} />

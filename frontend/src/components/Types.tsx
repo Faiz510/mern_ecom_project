@@ -29,4 +29,6 @@ export interface CardProps {
   discountPercentage: number;
   rating: number;
   category: string;
+  cardList: boolean;
+  description: string;
 }

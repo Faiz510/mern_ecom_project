@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 body {
-  font-family: "popins";
+  @apply font-body;
 }
 
 .flex-justify-center {
