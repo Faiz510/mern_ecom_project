@@ -19,6 +19,7 @@ const ProductPage = () => {
   return (
     <>
       <SmoothScrollTop params={""} />
+      <Link
         to={`..?${location.state.search}`}
         relative="path"
         className="flex justify-start gap-2 items-center text-start mt-5 ml-20 absolute"
