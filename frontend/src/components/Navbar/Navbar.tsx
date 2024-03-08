@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import LogoImg from "../../assests/logo.png";
 import {
   FaMagnifyingGlass,
@@ -144,7 +144,9 @@ const Navbar = () => {
                 <FaMagnifyingGlass />
               </li>
               <li>
-                <FaLock />
+                <Link to={"/register"}>
+                  <FaLock />
+                </Link>
               </li>
               <li>
                 <FaCartShopping />

@@ -11,7 +11,7 @@ const ContactPage = () => {
       <section className="my-20 w-[90vw] mx-auto">
         <div className="flex flex-col-reverse md:flex-row">
           {/* Content */}
-          <div className="md:w-1/2 flex justify-center items-center p-8 opacity-85 max-w-2xl">
+          <div className="md:w-1/2 flex justify-center items-center py-4 opacity-85 max-w-2xl">
             <form className="max-w-md mx-auto">
               <h3 className="text-4xl font-semibold mb-4 tracking-wider">
                 Contact Us
