@@ -1,6 +1,7 @@
 import bgBannerImg from "../../assests/img-bg-1.jpg";
 import PageBanner from "../../components/PageBanner";
 import TrustSection from "../Home/trustSection/TrustSection";
+import Testimonials from "../Home/Testimonials/Testimonials";
 
 const AboutPage = () => {
   return (
@@ -44,6 +45,9 @@ const AboutPage = () => {
           </div>
         </div>
       </section>
+
+      {/* //////////////// */}
+      <Testimonials />
 
       {/* //////////////// */}
       <TrustSection />

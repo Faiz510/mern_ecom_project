@@ -1,6 +1,7 @@
 import HeroSection from "./HeroSection/HeroSection";
 import AllProducts from "./AllProducts/AllProducts";
 import TrustSection from "./trustSection/TrustSection";
+import Testimonials from "./Testimonials/Testimonials";
 
 const Home = () => {
   return (
@@ -8,6 +9,7 @@ const Home = () => {
       <HeroSection />
       <AllProducts />
       <TrustSection />
+      <Testimonials />
     </>
   );
 };
