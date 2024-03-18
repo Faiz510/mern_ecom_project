@@ -14,6 +14,8 @@ import { motion } from "framer-motion";
 import { useMediaQuery } from "react-responsive";
 import Overlay from "../Overlay";
 import NavCategoriesBtn from "./NavCategoriesBtn";
+import { FetchProduct } from "../ProductPage/ProductPageContent/FetchProduct";
+import Cart from "./Cart";
 
 const Navbar = () => {
   const [showNavCat, setShowNavCat] = useState<boolean>(false);
@@ -49,6 +51,8 @@ const Navbar = () => {
   /////////////
   const showNavCatHandler = () => setShowNavCat((preShow) => !preShow);
 
+  ///////////////////////////////
+  const { fetchProductData, productLoading } = FetchProduct("1");
   return (
     <>
       <header className="flex justify-between items-center px-8 bg-custom-primary z-50 relative">
@@ -58,7 +62,7 @@ const Navbar = () => {
         </NavLink>
 
         <nav>
-          <div className="md:flex gap-6 items-center ">
+          <div className="md:flex gap-6 items-center pr-16">
             {/* nav links  */}
             <motion.ul
               className={`nav-lg-screen-cl nav-link-hover ${
@@ -99,7 +103,6 @@ const Navbar = () => {
                       showNavCat ? "text-custom-secondary" : ""
                     }`}
                   >
-                    {" "}
                     Category
                     <motion.span
                       initial={showNavCat ? { rotate: 180 } : {}}
@@ -122,8 +125,7 @@ const Navbar = () => {
                     isActive ? "text-custom-secondary scale-105" : ""
                   }
                 >
-                  {" "}
-                  About{" "}
+                  About
                 </NavLink>
               </li>
               <li>
@@ -133,14 +135,13 @@ const Navbar = () => {
                     isActive ? "text-custom-secondary scale-105" : ""
                   }
                 >
-                  {" "}
-                  Contact Us{" "}
+                  Contact Us
                 </NavLink>
               </li>
             </motion.ul>
 
-            <motion.ul className="flex gap-2 nav-link-hover">
-              <li>
+            <motion.ul className="flex gap-2  nav-link-hover">
+              <li className="">
                 <FaMagnifyingGlass />
               </li>
               <li>
@@ -148,8 +149,15 @@ const Navbar = () => {
                   <FaLock />
                 </Link>
               </li>
-              <li>
-                <FaCartShopping />
+              <li className="group">
+                <span className="group-hover:text-custom-secondary">
+                  <FaCartShopping />
+                </span>
+
+                <Cart
+                  productLoading={productLoading}
+                  fetchProductData={fetchProductData}
+                />
               </li>
             </motion.ul>
           </div>

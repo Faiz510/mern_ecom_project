@@ -11,7 +11,7 @@ const SignIn = () => {
     e.preventDefault();
 
     const formData = { email, password };
-    console.log(formData);
+    // console.log(formData);
 
     setEmail("");
     setPassword("");
