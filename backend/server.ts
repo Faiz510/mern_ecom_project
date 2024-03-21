@@ -1,10 +1,8 @@
-import express from "express";
+import app from "./app";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 //////////
 dotenv.config();
-
-const app = express();
 
 const DB: string = process.env.DATABASE || "";
 const PORT = process.env.PORT;
