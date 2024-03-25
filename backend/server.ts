@@ -12,4 +12,20 @@ if (!DB) throw new Error("DATABASE environment variable is not defined");
 mongoose.connect(DB).then(() => console.log("connect to db"));
 
 ////listen to port////////
-app.listen(PORT, () => console.log(`app is running on port ${PORT}`));
+const server = app.listen(PORT, () =>
+  console.log(`app is running on port ${PORT}`)
+);
+
+process.on("unhandledRejection", (err: any) => {
+  console.log(`unhandledRejection Errors : ${err.message}, ${err.name}`);
+  server.close(() => {
+    process.exit(1);
+  });
+});
+
+process.on("uncaughtException", (err: any) => {
+  console.log(`uncaughtException Errors : ${err.message}, ${err.name}`);
+  server.close(() => {
+    process.exit(1);
+  });
+});
