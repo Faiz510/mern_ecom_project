@@ -3,6 +3,14 @@ import Product from "../modal/ProductModal/ProductModal";
 import catchAsyncHandler from "../utils/catchAsyncHandler";
 import AppError from "../utils/AppError";
 
+// export const productCategoryNames = catchAsyncHandler(
+//   async (req, res, next) => {
+
+//     res.query.field = 'category'
+
+//   }
+// );
+
 export const AllProducts = catchAsyncHandler(async (req, res, next) => {
   // filtering
   const queryObj = { ...req.query };
@@ -110,3 +118,54 @@ export const deleteProduct = catchAsyncHandler(async (req, res, next) => {
     products: "",
   });
 });
+
+// export const productCategoryNames = catchAsyncHandler(
+//   async (req, res, next) => {
+//     const categories = await Product.aggregate([
+//       {
+//         $group: {
+//           _id: "$category",
+//         },
+//       },
+//       {
+//         $project: {
+//           _id: 0,
+//           category: "$_id",
+//         },
+//       },
+//     ]);
+
+//     const cat = categories.map((cat) => cat.category);
+
+//     res.status(200).json({
+//       status: "success",
+//       categories: cat.map((cat) => cat),
+//     });
+//   }
+// );
+
+export const productCategoryNames = catchAsyncHandler(
+  async (req, res, next) => {
+    const categories = await Product.aggregate([
+      {
+        $group: {
+          _id: "$category",
+        },
+      },
+      {
+        $group: {
+          _id: 0,
+          categories: { $push: "$_id" },
+        },
+      },
+    ]);
+
+    const uniqueCategories =
+      categories.length > 0 ? categories[0].categories.flat() : [];
+
+    res.status(200).json({
+      status: "success",
+      categories: uniqueCategories,
+    });
+  }
+);
