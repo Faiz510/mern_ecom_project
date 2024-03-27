@@ -1,11 +1,15 @@
 import mongoose, { Schema, Document } from "mongoose";
 import bycrypt from "bcryptjs";
 
-interface UserDocument extends Document {
+export interface UserDocument extends Document {
   username: string;
   email: string;
   password: string;
   confirmPassword?: string;
+  correctPassword(
+    candidatePassword: string,
+    userPassword: string
+  ): Promise<boolean>;
 }
 
 const UserSchema: Schema<UserDocument> = new mongoose.Schema(
@@ -28,6 +32,7 @@ const UserSchema: Schema<UserDocument> = new mongoose.Schema(
       min: [6, "password must be greater than 6"],
       max: [16, "password musbe lesser than 16"],
       required: [true, "A password is required"],
+      select: false,
     },
     confirmPassword: {
       type: String,
@@ -57,6 +62,13 @@ UserSchema.pre("save", async function (next) {
 
   return next();
 });
+
+UserSchema.methods.correctPassword = async function (
+  candidatePassword: string,
+  userPassword: string
+) {
+  return await bycrypt.compare(candidatePassword, userPassword);
+};
 
 const User = mongoose.model<UserDocument>("User", UserSchema);
 

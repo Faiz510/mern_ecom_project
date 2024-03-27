@@ -1,4 +1,4 @@
-import { signup } from "../controller/AuthController";
+import { signup, login } from "../controller/AuthController";
 import express from "express";
 import {
   deleteUser,
@@ -10,6 +10,8 @@ import {
 const router = express.Router();
 
 router.route("/signup").post(signup);
+
+router.route("/login").post(login);
 
 router.route("/").get(getAllUser);
 
