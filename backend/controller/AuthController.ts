@@ -2,7 +2,7 @@ import User, { UserDocument } from "../modal/UserModal/UserModal";
 import catchAsyncHandler from "../utils/catchAsyncHandler";
 import AppError from "../utils/AppError";
 import jwt from "jsonwebtoken";
-import { NextFunction, Request } from "express";
+import { NextFunction, Request, RequestHandler } from "express";
 
 export interface CustomRequest extends Request {
   user?: any;
@@ -30,13 +30,14 @@ const JwtGeneratorHandler = (next: NextFunction, user: UserDocument | null) => {
 };
 
 export const signup = catchAsyncHandler(async (req, res, next) => {
-  const { username, email, password, confirmPassword } = req.body;
+  const { username, email, password, confirmPassword, role } = req.body;
 
   const user = await User.create({
     username,
     email,
     password,
     confirmPassword,
+    role,
   });
 
   const token = JwtGeneratorHandler(next, user);
@@ -117,3 +118,12 @@ export const protectRoute = catchAsyncHandler(
     next();
   }
 );
+
+export const restrictToRoute = (...roles: string[]): RequestHandler => {
+  return (req: CustomRequest, res, next) => {
+    if (!req.user || !roles.includes(req.user.role)) {
+      return next(new AppError("You cannot access this route", 403));
+    }
+    next();
+  };
+};

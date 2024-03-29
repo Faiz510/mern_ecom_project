@@ -1,4 +1,9 @@
-import { signup, login, protectRoute } from "../controller/AuthController";
+import {
+  signup,
+  login,
+  protectRoute,
+  restrictToRoute,
+} from "../controller/AuthController";
 import express from "express";
 import {
   deleteUser,
@@ -15,6 +20,10 @@ router.route("/signup").post(signup);
 
 router.route("/login").post(login);
 
-router.route("/:id").get(userById).delete(deleteUser).put(updateUser);
+router
+  .route("/:id")
+  .get(protectRoute, userById)
+  .delete(protectRoute, restrictToRoute("admin"), deleteUser)
+  .put(protectRoute, restrictToRoute("admin"), updateUser);
 
 export default router;

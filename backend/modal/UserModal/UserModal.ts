@@ -7,6 +7,7 @@ export interface UserDocument extends Document {
   password: string;
   confirmPassword?: string;
   passwordChangeAt: Date;
+  role: string;
   correctPassword(
     candidatePassword: string,
     userPassword: string
@@ -28,6 +29,11 @@ const UserSchema: Schema<UserDocument> = new mongoose.Schema(
       type: String,
       unique: true,
       required: [true, "An email is required"],
+    },
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
     },
     password: {
       type: String,
