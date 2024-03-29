@@ -1,6 +1,7 @@
 import User from "../modal/UserModal/UserModal";
 import catchAsyncHandler from "../utils/catchAsyncHandler";
 import AppError from "../utils/AppError";
+import { Request } from "express";
 
 export const getAllUser = catchAsyncHandler(async (req, res, next) => {
   const user = await User.find();

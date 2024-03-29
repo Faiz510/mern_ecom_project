@@ -2,7 +2,17 @@ import User, { UserDocument } from "../modal/UserModal/UserModal";
 import catchAsyncHandler from "../utils/catchAsyncHandler";
 import AppError from "../utils/AppError";
 import jwt from "jsonwebtoken";
-import { NextFunction } from "express";
+import { NextFunction, Request } from "express";
+
+export interface CustomRequest extends Request {
+  user?: any;
+}
+
+interface decodedType {
+  id: string;
+  iat: number;
+  exp: number;
+}
 
 const JwtGeneratorHandler = (next: NextFunction, user: UserDocument | null) => {
   const secretKey = process.env.JWT_SECRET_KEY;
@@ -40,21 +50,16 @@ export const signup = catchAsyncHandler(async (req, res, next) => {
 
 export const login = catchAsyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
-
   if (!email || !password)
     return next(new AppError("email and password is required", 400));
 
   const user = await User.findOne({ email }).select("+password");
-
   if (!user) return next(new AppError("user not found with this email", 400));
-
-  //   console.log(password, user?.password);
 
   const isCorrectPassword = await user.correctPassword(
     password,
     user?.password
   );
-
   if (!isCorrectPassword)
     return next(new AppError("incorrect password or email", 400));
 
@@ -66,3 +71,49 @@ export const login = catchAsyncHandler(async (req, res, next) => {
     user,
   });
 });
+
+export const protectRoute = catchAsyncHandler(
+  async (req: CustomRequest, res, next) => {
+    // getting token
+    let token;
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.toString().startsWith("Bearer")
+    ) {
+      token = req.headers.authorization.toString().split(" ")[1];
+    }
+    if (!token)
+      return next(new AppError("Invalid Token or you are not logged in", 401));
+
+    // verify token
+    if (!process.env.JWT_SECRET_KEY)
+      return next(new AppError("Invalid jwt key", 401));
+
+    const decoded: decodedType | jwt.JwtPayload = jwt.verify(
+      token,
+      process.env.JWT_SECRET_KEY
+    ) as decodedType;
+
+    // user still exists
+    const currentUser = await User.findById({ _id: decoded.id });
+
+    if (!currentUser) return next(new AppError("user not exist ", 400));
+
+    // if user changes it password
+
+    const decodedIat = decoded.iat || 0;
+    const passwordChangeAt = await currentUser.passwordChangeAtMethod(
+      decodedIat
+    );
+
+    if (passwordChangeAt) {
+      return next(
+        new AppError("your recently changed your . plz login again", 400)
+      );
+    }
+
+    req.user = currentUser;
+
+    next();
+  }
+);

@@ -6,10 +6,12 @@ export interface UserDocument extends Document {
   email: string;
   password: string;
   confirmPassword?: string;
+  passwordChangeAt: Date;
   correctPassword(
     candidatePassword: string,
     userPassword: string
   ): Promise<boolean>;
+  passwordChangeAtMethod(timeStampLogin: number): Promise<boolean>;
 }
 
 const UserSchema: Schema<UserDocument> = new mongoose.Schema(
@@ -44,6 +46,9 @@ const UserSchema: Schema<UserDocument> = new mongoose.Schema(
         message: "Passwords do not match",
       },
     },
+    passwordChangeAt: {
+      type: Date,
+    },
   },
   {
     timestamps: true,
@@ -63,11 +68,22 @@ UserSchema.pre("save", async function (next) {
   return next();
 });
 
+// check password method
 UserSchema.methods.correctPassword = async function (
   candidatePassword: string,
   userPassword: string
 ) {
   return await bycrypt.compare(candidatePassword, userPassword);
+};
+
+UserSchema.methods.passwordChangeAtMethod = function (timeStampLogin: number) {
+  if (this.passwordChangeAt) {
+    const passwordChangeTime = Math.floor(
+      this.passwordChangeAt.getTime() / 1000
+    );
+    return passwordChangeTime > timeStampLogin;
+  }
+  return false; // If passwordChangeAt is null or undefined
 };
 
 const User = mongoose.model<UserDocument>("User", UserSchema);

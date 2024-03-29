@@ -1,4 +1,4 @@
-import { signup, login } from "../controller/AuthController";
+import { signup, login, protectRoute } from "../controller/AuthController";
 import express from "express";
 import {
   deleteUser,
@@ -9,11 +9,11 @@ import {
 
 const router = express.Router();
 
+router.route("/").get(protectRoute, getAllUser);
+
 router.route("/signup").post(signup);
 
 router.route("/login").post(login);
-
-router.route("/").get(getAllUser);
 
 router.route("/:id").get(userById).delete(deleteUser).put(updateUser);
 
