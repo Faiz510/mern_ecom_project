@@ -3,6 +3,8 @@ import {
   login,
   protectRoute,
   restrictToRoute,
+  ResetPassword,
+  forgotPassword,
 } from "../controller/AuthController";
 import express from "express";
 import {
@@ -19,6 +21,9 @@ router.route("/").get(protectRoute, getAllUser);
 router.route("/signup").post(signup);
 
 router.route("/login").post(login);
+
+router.route("/forgotPassword").post(forgotPassword);
+router.route("/resetPassword/:token").patch(ResetPassword);
 
 router
   .route("/:id")

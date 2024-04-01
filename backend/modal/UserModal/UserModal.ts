@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 import bycrypt from "bcryptjs";
+import crypto from "crypto";
 
 export interface UserDocument extends Document {
   username: string;
@@ -8,11 +9,14 @@ export interface UserDocument extends Document {
   confirmPassword?: string;
   passwordChangeAt: Date;
   role: string;
+  resetPasswordToken: string;
+  resetPasswordExpiresIn: Date | undefined;
   correctPassword(
     candidatePassword: string,
     userPassword: string
   ): Promise<boolean>;
   passwordChangeAtMethod(timeStampLogin: number): Promise<boolean>;
+  createResetTokenMethod(): Promise<string>;
 }
 
 const UserSchema: Schema<UserDocument> = new mongoose.Schema(
@@ -21,7 +25,6 @@ const UserSchema: Schema<UserDocument> = new mongoose.Schema(
       type: String,
       min: [4, "username must be greater than 4"],
       max: [16, "username musbe lesser than 16"],
-
       unique: true,
       required: [true, "A username is required"],
     },
@@ -52,9 +55,10 @@ const UserSchema: Schema<UserDocument> = new mongoose.Schema(
         message: "Passwords do not match",
       },
     },
-    passwordChangeAt: {
-      type: Date,
-    },
+    passwordChangeAt: Date,
+
+    resetPasswordToken: String,
+    resetPasswordExpiresIn: Date,
   },
   {
     timestamps: true,
@@ -63,12 +67,18 @@ const UserSchema: Schema<UserDocument> = new mongoose.Schema(
 
 // bycrypt password
 UserSchema.pre("save", async function (next) {
+  if (!this.isModified("password") || this.isNew) return next();
+
+  this.passwordChangeAt = new Date(Date.now() - 1000);
+  return next();
+});
+
+// bycrypt password
+UserSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
 
   const hashed = await bycrypt.hash(this.password, 12);
-
   this.password = hashed;
-
   this.confirmPassword = undefined;
 
   return next();
@@ -90,6 +100,19 @@ UserSchema.methods.passwordChangeAtMethod = function (timeStampLogin: number) {
     return passwordChangeTime > timeStampLogin;
   }
   return false; // If passwordChangeAt is null or undefined
+};
+
+UserSchema.methods.createResetTokenMethod = function () {
+  const resetToken = crypto.randomBytes(32).toString("hex");
+
+  // encryt resetPasswordToken
+  this.resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  this.resetPasswordExpiresIn = new Date(Date.now() + 10 * 60 * 1000);
+  return resetToken;
 };
 
 const User = mongoose.model<UserDocument>("User", UserSchema);

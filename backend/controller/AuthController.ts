@@ -3,6 +3,8 @@ import catchAsyncHandler from "../utils/catchAsyncHandler";
 import AppError from "../utils/AppError";
 import jwt from "jsonwebtoken";
 import { NextFunction, Request, RequestHandler } from "express";
+import sendNodeMail from "../utils/nodemailer";
+import crypto from "crypto";
 
 export interface CustomRequest extends Request {
   user?: any;
@@ -127,3 +129,70 @@ export const restrictToRoute = (...roles: string[]): RequestHandler => {
     next();
   };
 };
+
+export const forgotPassword = catchAsyncHandler(async (req, res, next) => {
+  // getting user with email
+  const user = await User.findOne({ email: req.body.email }).select(
+    "+password"
+  );
+  if (!user) return next(new AppError("no user with this email ", 400));
+
+  // generating reset Password token
+  const resetToken = user.createResetTokenMethod();
+
+  const resetURL = `${req.protocol}://${req.get(
+    "host"
+  )}//api/v1/users/resetPassword/${resetToken}`;
+
+  const message = `Forgot your password then send patch request on click on URL : ${resetURL}. if don't then ignore this message ?`;
+
+  const subject = "forgot password message";
+
+  // sending resetPasswordToken to user with nodemailer
+  try {
+    await sendNodeMail({ email: user.email, subject, message });
+
+    res.status(200).json({
+      status: "sucess",
+      message: "token has been to your email",
+    });
+  } catch (error) {
+    user.resetPasswordToken = "";
+    user.resetPasswordExpiresIn = undefined;
+
+    return next(new AppError("email didnot send", 400));
+  }
+  // save
+  await user.save({ validateBeforeSave: false });
+});
+
+export const ResetPassword = catchAsyncHandler(async (req, res, next) => {
+  const hashedPassword = crypto
+    .createHash("sha256")
+    .update(req.params.token)
+    .digest("hex");
+
+  const user = await User.findOne({
+    resetPasswordToken: hashedPassword,
+    resetPasswordExpiresIn: { $gt: new Date() },
+  });
+
+  if (!user || !user.resetPasswordExpiresIn) {
+    return next(new AppError("Invalid token or token has been expired", 400));
+  }
+
+  // new password Data
+  user.password = req.body.password;
+  user.confirmPassword = req.body.confirmPassword;
+  user.resetPasswordToken = "";
+  user.resetPasswordExpiresIn = undefined;
+  await user.save();
+
+  // generate Token
+  const token = JwtGeneratorHandler(next, user);
+
+  res.status(200).json({
+    status: "sucess",
+    token,
+  });
+});
