@@ -23,8 +23,8 @@ const UserSchema: Schema<UserDocument> = new mongoose.Schema(
   {
     username: {
       type: String,
-      min: [4, "username must be greater than 4"],
-      max: [16, "username musbe lesser than 16"],
+      minlength: [4, "username must be greater than 4"],
+      maxlength: [16, "username musbe lesser than 16"],
       unique: true,
       required: [true, "A username is required"],
     },
@@ -40,8 +40,8 @@ const UserSchema: Schema<UserDocument> = new mongoose.Schema(
     },
     password: {
       type: String,
-      min: [6, "password must be greater than 6"],
-      max: [16, "password musbe lesser than 16"],
+      minlength: [6, "password must be greater than 6"],
+      maxlength: [16, "password musbe lesser than 16"],
       required: [true, "A password is required"],
       select: false,
     },

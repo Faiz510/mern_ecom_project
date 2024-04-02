@@ -16,7 +16,10 @@ interface decodedType {
   exp: number;
 }
 
-const JwtGeneratorHandler = (next: NextFunction, user: UserDocument | null) => {
+export const JwtGeneratorHandler = (
+  next: NextFunction,
+  user: UserDocument | null
+) => {
   const secretKey = process.env.JWT_SECRET_KEY;
   const expiresIn = process.env.JWT_KEY_EXPIRES_IN;
 
@@ -71,7 +74,6 @@ export const login = catchAsyncHandler(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     token,
-    user,
   });
 });
 
