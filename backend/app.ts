@@ -2,6 +2,7 @@ import express from "express";
 import productRoute from "./route/ProductRoute";
 import userRoute from "./route/UserRoute";
 import cartRoute from "./route/CartRoute";
+import wishlistRoute from "./route/WishlistRoute";
 import AppError from "./utils/AppError";
 import { globalErrorHandler } from "./controller/errorController";
 import { rateLimit } from "express-rate-limit";
@@ -36,6 +37,7 @@ app.use(
 app.use("/api/v1/products", productRoute);
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/cart", cartRoute);
+app.use("/api/v1/wishlist", wishlistRoute);
 
 // Error Handling
 app.all("*", (req, res, next) =>
