@@ -69,7 +69,7 @@ export const createProduct = catchAsyncHandler(async (req, res, next) => {
 export const productById = catchAsyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
-  const product = await Product.findById(id);
+  const product = await Product.findById(id).populate("reviews");
 
   if (!product)
     return next(new AppError("product not found with this Id", 404));

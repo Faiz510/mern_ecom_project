@@ -9,18 +9,14 @@ import {
 
 const router = express.Router();
 
-// products
-router
-  .route("/")
-  .post(protectRoute, restrictToRoute("user"), addProductToWishlist)
-  .get(protectRoute, restrictToRoute("user"), allWishlistProduct);
+// wishlist
 
-router
-  .route("/clearWishlist")
-  .post(protectRoute, restrictToRoute("user"), clearWishlistItems);
+router.use(protectRoute, restrictToRoute("user")); // applied to all routes
 
-router
-  .route("/removeItem/:objectId")
-  .patch(protectRoute, restrictToRoute("user"), removeWishlistItem);
+router.route("/").post(addProductToWishlist).get(allWishlistProduct);
+
+router.route("/clearWishlist").post(clearWishlistItems);
+
+router.route("/removeItem/:objectId").patch(removeWishlistItem);
 
 export default router;

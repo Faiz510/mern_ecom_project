@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { set } from "mongoose";
 
 const ProductSchema = new mongoose.Schema(
   {
@@ -33,11 +33,17 @@ const ProductSchema = new mongoose.Schema(
     tags: {
       type: [String],
     },
-    AvgRating: {
+    reviewQuantity: {
       type: Number,
+      default: 0,
+    },
+    avgRating: {
+      type: Number,
+      default: 4,
       required: [true, "a product rating is required"],
       min: [0, "A rating cannot be negative"],
       max: [5, "A rating cannot be greater than 5"],
+      set: (val: number) => Math.round((val * 10) / 10),
     },
     discountPercentage: {
       type: Number,
@@ -49,9 +55,20 @@ const ProductSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true,
+    toJSON: {
+      virtuals: true,
+    },
+    toObject: {
+      virtuals: true,
+    },
   }
 );
+
+ProductSchema.virtual("reviews", {
+  ref: "Reviews",
+  foreignField: "product",
+  localField: "_id",
+});
 
 const Product = mongoose.model("Product", ProductSchema);
 

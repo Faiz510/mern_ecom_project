@@ -8,8 +8,12 @@ import {
   updateProduct,
 } from "../controller/ProductController";
 import { protectRoute, restrictToRoute } from "../controller/AuthController";
+// import { addReview } from "../controller/ReviewsController";
+import reviewRouter from "./ReviewsRoute";
 
 const router = express.Router();
+
+router.use("/:productId/reviews", reviewRouter);
 
 // products
 router

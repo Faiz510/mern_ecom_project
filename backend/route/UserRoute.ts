@@ -19,25 +19,29 @@ import {
 
 const router = express.Router();
 
-router.route("/").get(protectRoute, getAllUser);
-
 router.route("/signup").post(signup);
 
 router.route("/login").post(login);
 
-router.route("/updateMyPassword").patch(protectRoute, updateMyPassword);
-
-router.route("/updateMyData").patch(protectRoute, updateCurrentUser);
-
-router.route("/deleteMe").delete(protectRoute, deleteMe);
-
 router.route("/forgotPassword").post(forgotPassword);
+
 router.route("/resetPassword/:token").patch(ResetPassword);
 
+router.use(protectRoute); // applied to all routes
+
+router
+  .route("/updateMyPassword")
+  .patch(restrictToRoute("user"), updateMyPassword);
+
+router.route("/updateMyData").patch(restrictToRoute("user"), updateCurrentUser);
+
+router.route("/deleteMe").delete(restrictToRoute("user"), deleteMe);
+
+router.route("/").get(restrictToRoute("admin"), getAllUser);
 router
   .route("/:id")
-  .get(protectRoute, userById)
-  .delete(protectRoute, restrictToRoute("admin"), deleteUser)
-  .put(protectRoute, restrictToRoute("admin"), updateUser);
+  .get(restrictToRoute("admin"), userById)
+  .delete(restrictToRoute("admin"), deleteUser)
+  .put(restrictToRoute("admin"), updateUser);
 
 export default router;

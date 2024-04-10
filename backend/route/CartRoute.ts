@@ -10,21 +10,15 @@ import {
 
 const router = express.Router();
 
-// products
-router
-  .route("/")
-  .post(protectRoute, restrictToRoute("user"), addProductToCart)
-  .get(protectRoute, restrictToRoute("user"), allCartProduct);
+// Cart router
 
-router
-  .route("/clearAll")
-  .post(protectRoute, restrictToRoute("user"), clearCartItem);
+router.use(protectRoute, restrictToRoute("user")); // applied to all routes
 
-router
-  .route("/:objectId")
-  .patch(protectRoute, restrictToRoute("user"), removeCartItem);
-router
-  .route("/updateQuantity/:objectId")
-  .patch(protectRoute, restrictToRoute("user"), updateQuantity);
+router.route("/").post(addProductToCart).get(allCartProduct);
+
+router.route("/clearAll").post(clearCartItem);
+
+router.route("/:objectId").patch(removeCartItem);
+router.route("/updateQuantity/:objectId").patch(updateQuantity);
 
 export default router;
