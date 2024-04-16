@@ -7,7 +7,7 @@
 }
 
 .icon-box-cl span {
-  @apply text-[1rem] font-thin tracking-wider opacity-70 leading-3;
+  @apply text-[1rem] font-extralight tracking-wider opacity-70 leading-3;
 }
 
 .icon-box-cl h3 {

@@ -1,17 +1,23 @@
 import Card from "./Card/Card.tsx";
 import Loader from "../Loader.tsx";
+import { Product } from "../Types.tsx";
 import { ProductData } from "../Types.tsx";
 import { useFetchData } from "../../Hooks/useFetchData.tsx";
+import { FC } from "react";
 
-const Products = () => {
+interface ProductProps {
+  fetchUrl: string;
+}
+
+const Products: FC<ProductProps> = ({ fetchUrl }) => {
   // fetchResquest
   const parseFunctionData = (data: any) => data as ProductData;
 
-  const fetchUrl = `${import.meta.env.VITE_BASE_URL}/api/v1/products?limit=3`;
   const { responseData, fetchLoading } = useFetchData<ProductData>(
-    `${fetchUrl}`,
+    fetchUrl,
     {
       products: [],
+      productLength: 0,
       total: 0,
       skip: 0,
       limit: 0,
@@ -23,7 +29,7 @@ const Products = () => {
     <section className="flex justify-center items-center">
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {!fetchLoading ? (
-          responseData?.products?.map((product) => (
+          responseData?.products?.map((product: Product) => (
             <Card
               title={product.title}
               img={product.thumbnail}

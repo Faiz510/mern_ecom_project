@@ -3,9 +3,6 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 const AllProducts = () => {
-  // const { scrollY } = useScroll();
-  // const scrollOp = useTransform(scrollY, [0, 200, 300, 500], [0, 0.2, 0.5, 1]);
-
   return (
     <motion.div
       initial={{ opacity: 0, x: -200 }}
@@ -13,7 +10,7 @@ const AllProducts = () => {
     >
       <div className="text-center my-10 ">
         <h3 className="text-4xl tracking-wider font-medium py-2 md:text-6xl opacity-90">
-          All Products
+          Newly Arrived Product
         </h3>
         <p className="font-thin tracking-wider text-[1.2rem] px-4">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis,
@@ -21,7 +18,11 @@ const AllProducts = () => {
         </p>
       </div>
 
-      <Products />
+      <Products
+        fetchUrl={`${
+          import.meta.env.VITE_BASE_URL
+        }/api/v1/products?sort=-createdAt&field=_id,category,title,price,avgRating,discountPercentage,thumbnail&limit=3`}
+      />
 
       <div className="text-center w-full">
         <motion.div

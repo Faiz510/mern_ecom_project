@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import bgImg from "../../../assests/img-bg-1.jpg";
 import profileImg1 from "../../../assests/profile-img-1.jpg";
 import profileImg2 from "../../../assests/profile-img-2.jpg";
@@ -36,9 +36,11 @@ const Testimonials = () => {
   const [testNum, setTestNum] = useState<number>(0); // testimonial num
 
   return (
-    <section
+    <motion.section
       style={{ backgroundImage: `url(${bgImg})` }}
       className="h-[400px] bg-cover bg-center my-20 flex justify-center items-center relative flex-col w-full "
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1, transition: { duration: 0.8 } }}
     >
       <div className="z-30 w-[1000px] overflow-hidden">
         <div
@@ -85,7 +87,7 @@ const Testimonials = () => {
           />
         ))}
       </div>
-    </section>
+    </motion.section>
   );
 };
 

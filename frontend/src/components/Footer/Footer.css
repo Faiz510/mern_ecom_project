@@ -1,5 +1,5 @@
 footer ul li {
-  @apply my-[2px] font-light text-black/80;
+  @apply my-[2px] font-extralight text-black/80;
 }
 
 .footer-col-h {
@@ -15,7 +15,7 @@ footer ul li {
 }
 
 .contact-info-inner-cl span {
-  @apply font-thin opacity-70;
+  @apply font-extralight text-black/80;
 }
 
 .contact-info-inner-cl svg {

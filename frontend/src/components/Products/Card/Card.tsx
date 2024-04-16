@@ -41,7 +41,7 @@ const Card: React.FC<CardProps> = (props) => {
           src={`${img}`}
           alt={`${title}`}
           className={`${
-            cardList ? "w-[80%] h-[90%] mt-0" : "w-[400px]"
+            cardList ? "w-[80%] h-[250px] object-cover mt-0" : "w-[400px]"
           } h-[250px] object-cover rounded`}
         />
       </div>
@@ -56,7 +56,9 @@ const Card: React.FC<CardProps> = (props) => {
         <RatingStar rating={avgRating} />
 
         <div className="flex items-center justify-center gap-4">
-          <del className="opacity-40 font-medium">$ {discountedPrice}</del>{" "}
+          <del className="opacity-40 font-medium">
+            $ {discountedPrice.toFixed(2)}
+          </del>{" "}
           <br />
           <span className="price-color font-semibold tracking-wider">
             $ {price.toFixed(2)}
