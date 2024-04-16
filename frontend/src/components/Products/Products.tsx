@@ -7,7 +7,7 @@ const Products = () => {
   // fetchResquest
   const parseFunctionData = (data: any) => data as ProductData;
 
-  const fetchUrl = "https://dummyjson.com/products?limit=3";
+  const fetchUrl = `${import.meta.env.VITE_BASE_URL}/api/v1/products?limit=3`;
   const { responseData, fetchLoading } = useFetchData<ProductData>(
     `${fetchUrl}`,
     {
@@ -33,6 +33,7 @@ const Products = () => {
               category={product.category}
               id={product.id}
               cardList={false}
+              avgRating={product.avgRating}
               description={product.description}
             />
           ))

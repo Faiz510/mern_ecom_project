@@ -1,16 +1,19 @@
 import { useFetchData } from "../../Hooks/useFetchData";
-import Loader from "../Loader";
 import { motion } from "framer-motion";
 import { Link, useSearchParams } from "react-router-dom";
+import { CategoriesTypes } from "../Types";
 
 const NavCategoriesBtn = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   // fetch products
-  const parseFunctionData = (data: any) => data as string[];
-  const fetchUrl = "https://dummyjson.com/products/categories";
-  const { responseData, fetchLoading } = useFetchData<string[]>(
+  const parseFunctionData = (data: any) => data as CategoriesTypes;
+  // const fetchUrl = "https://dummyjson.com/products/categories";
+  const fetchUrl = `${
+    import.meta.env.VITE_BASE_URL
+  }/api/v1/products/product-categories`;
+  const { responseData, fetchLoading } = useFetchData<CategoriesTypes>(
     `${fetchUrl}`,
-    [],
+    { categories: [] },
     parseFunctionData
   ); // fetch all categories title function
 
@@ -32,7 +35,7 @@ const NavCategoriesBtn = () => {
           initial={{ translateY: -200, opacity: 0 }}
           animate={{ translateY: 0, opacity: 1 }}
         >
-          {responseData.map((category, i) => (
+          {responseData.categories.map((category, i) => (
             <Link
               to={"/products/" + searchCatHanlder("category", `${category}`)}
               key={i}

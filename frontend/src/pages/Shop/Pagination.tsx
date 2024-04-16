@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
+// import { searchQueryParamsHandler } from "./Filters/SearchQueryParamsHandler";
 
 interface PaginationProp {
   currentPage: number;
@@ -16,7 +17,9 @@ const Pagination: React.FC<PaginationProp> = ({
   totalPages,
   getPageNumbers,
 }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const { pathname } = useLocation();
+
   useEffect(() => {
     window.scrollTo(0, 0); // scorll to when pages changes
   }, [pathname, currentPage]);
@@ -31,6 +34,21 @@ const Pagination: React.FC<PaginationProp> = ({
     backgroundColor: "#9A9A9A",
     transition: { duration: 0.3, type: "just", stiffness: 800 },
   };
+
+  const searchQueryParamsHandler = (key: string, value: string) => {
+    setSearchParams((preSearch) => {
+      if (value === null) {
+        preSearch.delete(key);
+      } else {
+        preSearch.set(key, value);
+      }
+      return preSearch;
+    });
+  };
+
+  useEffect(() => {
+    searchQueryParamsHandler("page", `${currentPage}`);
+  }, [currentPage]);
 
   // displaying page number function
   const displayingPageNumbers = (pageNumber: number) => {

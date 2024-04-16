@@ -15,6 +15,8 @@ export const AllProducts = catchAsyncHandler(async (req, res, next) => {
 
   let query = Product.find(JSON.parse(strObj));
 
+  let CountQuery = Product.find(JSON.parse(strObj));
+
   // sort filtering
   if (req.query.sort) {
     const sort: string = req.query.sort.toString();
@@ -39,19 +41,19 @@ export const AllProducts = catchAsyncHandler(async (req, res, next) => {
   const skip = (page - 1) * limit;
 
   query = query.skip(skip).limit(limit);
-
-  const productNum = await Product.countDocuments();
-  if (req.query.page) {
-    if (skip >= productNum) return next(new AppError("page Note found", 404));
-  }
   //
   const product = await query;
+
+  const productsCount = await CountQuery.countDocuments();
+  if (req.query.page && skip >= productsCount) {
+    return next(new AppError("page Note found", 404));
+  }
 
   res.status(200).json({
     status: "sucess",
     productLenght: product.length,
     products: product,
-    total: productNum,
+    total: productsCount,
     skip: skip,
     limit: limit,
   });

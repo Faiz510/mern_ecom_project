@@ -10,9 +10,11 @@ import { rateLimit } from "express-rate-limit";
 import helmet from "helmet";
 import ExpressMongoSanitize from "express-mongo-sanitize";
 import hpp from "hpp";
+import cors from "cors";
 
 const app = express();
 
+app.use(cors());
 app.use(helmet());
 
 const limiter = rateLimit({

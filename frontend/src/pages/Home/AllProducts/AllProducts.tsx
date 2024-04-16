@@ -1,11 +1,10 @@
-import React from "react";
 import Products from "../../../components/Products/Products";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 const AllProducts = () => {
-  const { scrollY } = useScroll();
-  const scrollOp = useTransform(scrollY, [0, 200, 300, 500], [0, 0.2, 0.5, 1]);
+  // const { scrollY } = useScroll();
+  // const scrollOp = useTransform(scrollY, [0, 200, 300, 500], [0, 0.2, 0.5, 1]);
 
   return (
     <motion.div

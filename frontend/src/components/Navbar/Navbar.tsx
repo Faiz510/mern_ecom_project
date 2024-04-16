@@ -14,8 +14,9 @@ import { motion } from "framer-motion";
 import { useMediaQuery } from "react-responsive";
 import Overlay from "../Overlay";
 import NavCategoriesBtn from "./NavCategoriesBtn";
-import { FetchProduct } from "../ProductPage/ProductPageContent/FetchProduct";
 import Cart from "./Cart";
+import { useFetchData } from "../../Hooks/useFetchData";
+import { CartApiResponse } from "../Types";
 
 const Navbar = () => {
   const [showNavCat, setShowNavCat] = useState<boolean>(false);
@@ -52,7 +53,25 @@ const Navbar = () => {
   const showNavCatHandler = () => setShowNavCat((preShow) => !preShow);
 
   ///////////////////////////////
-  const { fetchProductData, productLoading } = FetchProduct("1");
+  // const { fetchProductData, productLoading } = FetchProduct("1");
+  const fetchUrl = `${import.meta.env.VITE_BASE_URL}/api/v1/cart`;
+  const parseData = (data: any) => data as CartApiResponse;
+  const { responseData: fetchProductData, fetchLoading } =
+    useFetchData<CartApiResponse>(
+      fetchUrl,
+      {
+        cart: {
+          _id: "",
+          userId: "",
+          products: [],
+          totalAmount: 0,
+          totalProducts: 0,
+          totalQuantity: 0,
+          id: "",
+        },
+      },
+      parseData
+    );
   return (
     <>
       <header className="flex justify-between items-center px-8 bg-custom-primary z-50 relative">
@@ -155,8 +174,8 @@ const Navbar = () => {
                 </span>
 
                 <Cart
-                  productLoading={productLoading}
-                  fetchProductData={fetchProductData}
+                  productLoading={fetchLoading}
+                  fetchProductData={fetchProductData.cart}
                 />
               </li>
             </motion.ul>

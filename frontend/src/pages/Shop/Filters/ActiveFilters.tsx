@@ -1,6 +1,7 @@
 import React from "react";
 import { useSearchParams } from "react-router-dom";
 import { FaXmark } from "react-icons/fa6";
+// import { removeQureyParamsHandler } from "./SearchQueryParamsHandler";
 
 interface ActiveFiltersProps {
   handler: (data: string) => void;
@@ -10,7 +11,7 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({ handler }) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const searchCategory = searchParams.get("category");
-  const searchRating = searchParams.get("rating");
+  const searchRating = searchParams.get("avgRating");
   const searchPrice = searchParams.get("price");
 
   return (
@@ -27,7 +28,7 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({ handler }) => {
       )}
       {searchRating ? (
         <button
-          onClick={() => handler("rating")}
+          onClick={() => handler("avgRating")}
           className="flex items-center gap-2 bg-custom-primary text-black px-2 py-1 font-light"
         >
           rating : up to {searchRating} <FaXmark />

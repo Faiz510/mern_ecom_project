@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./Card.css";
 import RatingStar from "./RatingStar.tsx";
 import { CardProps } from "../../Types.tsx";
@@ -13,22 +13,25 @@ const Card: React.FC<CardProps> = (props) => {
     img,
     price,
     discountPercentage,
-    rating,
     category,
     cardList,
     description,
+    avgRating,
   } = props;
 
   const [searchParams, setSearchParams] = useSearchParams(); // to get searchParams from url
 
+  const disVal = discountPercentage / 100;
+  const discountedPrice = price - price * disVal;
   return (
     <Link
       to={`/products/${id}`}
       relative="path"
       key={id}
+      id={`${id}`}
       className={`${
         cardList
-          ? "w-[80%] flex flex-col items-center h-[500px] md:h-[250px] md:flex-row gap-2 mx-auto"
+          ? "w-[80%] grid grid-cols-1  md:grid-cols-2  items-center h-[500px] md:h-[250px] gap-10 mx-auto"
           : "w-[300px]"
       }  bg-custom-primary rounded cursor-pointer relative group overflow-hidden transition-all duration-300 group-hover:shadow-lg `}
       state={{ search: searchParams.toString() }}
@@ -38,22 +41,23 @@ const Card: React.FC<CardProps> = (props) => {
           src={`${img}`}
           alt={`${title}`}
           className={`${
-            cardList ? "w-full" : "w-[400px]"
+            cardList ? "w-[80%] h-[90%] mt-0" : "w-[400px]"
           } h-[250px] object-cover rounded`}
         />
       </div>
 
       <div className="p-3">
         <h3 className="font-semibold tracking-wider text-custom-secondary">
-          {category}
+          {category.join(" , ")}
         </h3>
 
         <h2 className="text-[1.2rem] font-medium tracking-widest">{title}</h2>
 
-        <RatingStar rating={rating} />
+        <RatingStar rating={avgRating} />
 
         <div className="flex items-center justify-center gap-4">
-          <del className="opacity-40 font-medium">$ {price + 100}</del> <br />
+          <del className="opacity-40 font-medium">$ {discountedPrice}</del>{" "}
+          <br />
           <span className="price-color font-semibold tracking-wider">
             $ {price.toFixed(2)}
           </span>
@@ -63,7 +67,7 @@ const Card: React.FC<CardProps> = (props) => {
           </span>
         </div>
 
-        <div className="mt-4 text-custom-font_primary px-2">
+        <div className="mt-2 pb-4 text-custom-font_primary px-2">
           <p>
             {cardList
               ? description.length > 100

@@ -8,8 +8,8 @@ const Home = () => {
     <>
       <HeroSection />
       <AllProducts />
-      <TrustSection />
       <Testimonials />
+      <TrustSection />
     </>
   );
 };

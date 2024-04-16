@@ -1,13 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import Loader from "../Loader";
 import TrustSection from "../../pages/Home/trustSection/TrustSection";
 import ProductImgGallery from "./ProductPageContent/ProductImgGallery";
 import ProductDetailsSection from "./ProductPageContent/ProductDetailsSection";
-import { FetchProduct } from "./ProductPageContent/FetchProduct";
 import { useLocation, Link } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa6";
 import SmoothScrollTop from "../SmoothScrollTop/SmoothScrollTop";
+import { useFetchData } from "../../Hooks/useFetchData";
+import { Product } from "../Types";
 
 const ProductPage = () => {
   const [imgVal, setImgVal] = useState<number>(0);
@@ -15,7 +16,42 @@ const ProductPage = () => {
   const productId: string | null = id || null;
   const location = useLocation();
 
-  const { fetchProductData, productLoading } = FetchProduct(productId);
+  // const { fetchProductData, productLoading } = FetchProduct(productId);
+
+  interface SingleProductPageDataType {
+    products: Product;
+  }
+
+  // console.log(fetchProductData);
+  const fetchUrl = `${
+    import.meta.env.VITE_BASE_URL
+  }/api/v1/products/${productId}`;
+
+  const parseFunctionData = (data: any) => data as SingleProductPageDataType;
+
+  const { responseData: fetchProductData, fetchLoading } =
+    useFetchData<SingleProductPageDataType>(
+      `${fetchUrl}`,
+      {
+        products: {
+          id: 0,
+          title: "",
+          description: "",
+          price: 0,
+          discountPercentage: 0,
+          rating: 0,
+          avgRating: 0,
+          stock: 0,
+          brand: "",
+          category: "",
+          thumbnail: "",
+          images: [],
+          reviews: [],
+        },
+      },
+      parseFunctionData
+    ); // fetch function
+
   return (
     <>
       <SmoothScrollTop params={""} />
@@ -33,15 +69,17 @@ const ProductPage = () => {
         {/* <div className="text-center my-4">
         <h2 className="font-normal text-6xl tracking-widest">Product Page</h2>
       </div> */}
-        {!productLoading ? (
+        {!fetchLoading ? (
           <div className="px-4 py-10 my-10 mx-auto w-[90vw] rounded-md lg:grid lg:gap-10 lg:grid-cols-2">
             <ProductImgGallery
               imgVal={imgVal}
-              fetchProductData={fetchProductData}
+              fetchProductData={fetchProductData?.products}
               setImgVal={setImgVal}
             />
 
-            <ProductDetailsSection fetchProductData={fetchProductData} />
+            <ProductDetailsSection
+              fetchProductData={fetchProductData?.products}
+            />
           </div>
         ) : (
           <div>

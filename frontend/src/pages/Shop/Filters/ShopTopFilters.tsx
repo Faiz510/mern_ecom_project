@@ -26,7 +26,7 @@ const ShopTopFilters: React.FC<ShopTopFiltersProps> = ({
   productView,
 }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const searchSortBy = searchParams.get("order");
+  const searchSortBy = searchParams.get("sort");
 
   // set search params in url
   const searchParamsHanlder = (key: string, value: string) => {
@@ -41,7 +41,7 @@ const ShopTopFilters: React.FC<ShopTopFiltersProps> = ({
   };
 
   const handleSortChange = (event: ChangeEvent<HTMLSelectElement>) =>
-    searchParamsHanlder("order", event.target.value); // set value to params
+    searchParamsHanlder("sort", event.target.value); // set value to params
 
   return (
     <section className="flex flex-col lg:flex-row w-full justify-between items-center px-12">
@@ -80,10 +80,10 @@ const ShopTopFilters: React.FC<ShopTopFiltersProps> = ({
           className="border p-2 rounded-md focus:outline-none  text-custom-font_primary font-light text-sm"
         >
           <option value="relevence"> Relevance</option>
-          <option value="nameAsc">Name A to Z</option>
-          <option value="nameDesc">Name Z to A</option>
-          <option value="priceAsc">Price Low to High</option>
-          <option value="priceDesc">Price High to Low</option>
+          <option value="title">Name A to Z</option>
+          <option value="-title">Name Z to A</option>
+          <option value="price">Price Low to High</option>
+          <option value="-price">Price High to Low</option>
         </select>
       </div>
     </section>

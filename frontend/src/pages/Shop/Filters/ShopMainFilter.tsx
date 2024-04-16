@@ -9,6 +9,7 @@ import { useMediaQuery } from "react-responsive";
 import Overlay from "../../../components/Overlay.tsx";
 import { motion } from "framer-motion";
 import { FaXmark } from "react-icons/fa6";
+import { CategoriesTypes } from "../../../components/Types.tsx";
 
 const ShopMainFilter = () => {
   const [showFilter, setShowFilters] = useState<boolean>(false); // display filter on small device
@@ -18,11 +19,13 @@ const ShopMainFilter = () => {
     if (!isSmallDevice) setShowFilters(false);
   }, [showFilter, isSmallDevice]);
 
-  const parseFunctionData = (data: any) => data as string[];
-  const fetchUrl = "https://dummyjson.com/products/categories";
-  const { responseData, fetchLoading } = useFetchData<string[]>(
+  const parseFunctionData = (data: any) => data as CategoriesTypes;
+  const fetchUrl = `${
+    import.meta.env.VITE_BASE_URL
+  }/api/v1/products/product-categories`;
+  const { responseData, fetchLoading } = useFetchData<CategoriesTypes>(
     `${fetchUrl}`,
-    [],
+    { categories: [] },
     parseFunctionData
   ); // fetch all categories title function
 
@@ -31,17 +34,12 @@ const ShopMainFilter = () => {
 
   const ratingFilterArr: number[] = [4.5, 4, 3.5, 3]; // rating value Arr
 
-  const searchCatHanlder = (key: string, value: string) => {
-    const cat = new URLSearchParams(searchParams);
-    if (value === null) {
-      cat.delete(key);
-    } else {
-      cat.set(key, value);
-    }
-    return `?${cat.toString()}`;
-  };
+  //   loading
+  if (fetchLoading) return <Loader />;
 
-  const searchParamsHanlder = (key: string, value: string) => {
+  const showFilterHandler = () => setShowFilters((preFilter) => !preFilter);
+
+  const searchQueryParamsHandler = (key: string, value: string) => {
     // const cat = new URLSearchParams(searchParams);
     setSearchParams((preSearch) => {
       if (value === null) {
@@ -53,10 +51,15 @@ const ShopMainFilter = () => {
     });
   };
 
-  //   loading
-  if (fetchLoading) return <Loader />;
-
-  const showFilterHandler = () => setShowFilters((preFilter) => !preFilter);
+  const searchCategoryHandler = (key: string, value: string) => {
+    const cat = new URLSearchParams(searchParams);
+    if (value === null) {
+      cat.delete(key);
+    } else {
+      cat.set(key, value);
+    }
+    return `?${cat.toString()}`;
+  };
 
   return (
     <motion.aside className="">
@@ -88,8 +91,11 @@ const ShopMainFilter = () => {
 
         <FilterSectionLayout title={"Categories"}>
           {!fetchLoading &&
-            responseData?.map((category: string, i: number) => (
-              <Link to={searchCatHanlder("category", `${category}`)} key={i}>
+            responseData?.categories.map((category: string, i: number) => (
+              <Link
+                to={searchCategoryHandler("category", `${category}`)}
+                key={i}
+              >
                 <label
                   htmlFor={`checkbox-${i}`}
                   className="cursor-pointer flex gap-2"
@@ -108,16 +114,18 @@ const ShopMainFilter = () => {
 
         {/* Prices   */}
         <FilterSectionLayout title={"Price"}>
-          <button onClick={() => searchParamsHanlder("price", "10-25")}>
+          <button onClick={() => searchQueryParamsHandler("price", "10-25")}>
             up to $10 to $25
           </button>
-          <button onClick={() => searchParamsHanlder("price", "25-50")}>
+          <button onClick={() => searchQueryParamsHandler("price", "25-50")}>
             up to $25 to $50
           </button>
-          <button onClick={() => searchParamsHanlder("price", "50-100")}>
+          <button onClick={() => searchQueryParamsHandler("price", "50-100")}>
             up to $50 to $100
           </button>
-          <button onClick={() => searchParamsHanlder("price", "100-above")}>
+          <button
+            onClick={() => searchQueryParamsHandler("price", "100-above")}
+          >
             up to 100$ to above
           </button>
         </FilterSectionLayout>
@@ -127,7 +135,7 @@ const ShopMainFilter = () => {
         <FilterSectionLayout title={"Rating"}>
           {ratingFilterArr.map((rating, i) => (
             <button
-              onClick={() => searchParamsHanlder("rating", `${rating}`)}
+              onClick={() => searchQueryParamsHandler("avgRating", `${rating}`)}
               className="flex gap-2 items-center"
               key={i}
             >
