@@ -17,6 +17,8 @@ import AboutPage from "./pages/About/AboutPage";
 import ContactPage from "./pages/Contact/ContactPage";
 import Register from "./pages/SignPage/Register";
 import SignIn from "./pages/SignPage/SignIn";
+import ForgotPassword from "./pages/SignPage/ForgotPassword";
+import ResetPassword from "./pages/SignPage/ResetPassword";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -27,6 +29,8 @@ const router = createBrowserRouter(
       <Route path="products" element={<ShopPage />} />
       <Route path="register" element={<Register />} />
       <Route path="signin" element={<SignIn />} />
+      <Route path="forgotPassword" element={<ForgotPassword />} />
+      <Route path="resetPassword/:resetToken" element={<ResetPassword />} />
       <Route path="products/:id" element={<ProductPage />} />
     </Route>
   )

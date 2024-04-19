@@ -26,10 +26,18 @@ export const useFetchData = <T,>(
         setResponseData(parsedData);
 
         setFetchLoading(false);
-      } catch (error) {
+      } catch (error: any) {
         console.error(error);
-        setFetchError(error || "error is message");
+
         setFetchLoading(false);
+        setFetchError(error);
+        // if (error?.response.data?.error.statusCode === 404) {
+        //   // console.log("page not found");
+        //   setFetchError(error.response.data.statusCode);
+        // } else {
+        //   setFetchError(error);
+        //   // console.log("ditnot found");
+        // }
       }
     };
 

@@ -31,7 +31,7 @@ export interface Product {
 // products
 export interface ProductData {
   products: Product[];
-  productLength: number;
+  productLenght: number;
   total: number;
   skip: number;
   limit: number;

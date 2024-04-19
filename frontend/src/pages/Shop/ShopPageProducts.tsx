@@ -50,11 +50,11 @@ const ShopPageProducts: React.FC<ProductViewProp> = ({ productView }) => {
   }/api/v1/products?field=${fields}&page=${currentPage}&limit=6${
     newParams ? `&${newParams}` : ""
   }`;
-  const { responseData, fetchLoading } = useFetchData<ProductData>(
+  const { responseData, fetchLoading, fetchError } = useFetchData<ProductData>(
     `${fetchUrl}`,
     {
       products: [],
-      productLength: 0,
+      productLenght: 0,
       total: 0,
       skip: 0,
       limit: 0,
@@ -129,7 +129,7 @@ const ShopPageProducts: React.FC<ProductViewProp> = ({ productView }) => {
           }}
         >
           {/* if product view = grid show grid else show list */}
-          {!fetchLoading ? (
+          {!fetchLoading && fetchError == "" ? (
             productView === "grid" ? (
               responseData.products?.map((product) =>
                 renderedCard(product, false)
@@ -139,18 +139,15 @@ const ShopPageProducts: React.FC<ProductViewProp> = ({ productView }) => {
                 renderedCard(product, true)
               )
             )
+          ) : fetchError || responseData?.productLenght === 0 ? (
+            <div className="w-full my-10 font-semibold text-4xl text-center">
+              <h3>Noting to show</h3>
+            </div>
           ) : (
             <Loader />
           )}
         </motion.div>
       </section>
-
-      {/* if no item to show  */}
-      {responseData?.products.length === 0 && (
-        <div className="w-full my-10 font-semibold text-4xl text-center">
-          <h3>Noting to show</h3>
-        </div>
-      )}
 
       {responseData?.products?.length !== 0 && (
         <Pagination

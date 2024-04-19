@@ -1,21 +1,28 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import FormLayout from "./SignPageLayout/FormLayout";
-import InputGroup from "./SignPageLayout/InputGroup";
 import PasswordInputGroup from "./SignPageLayout/PasswordInputGroup";
 import SubmitButton from "./SignPageLayout/SubmitButton";
 import FormError from "./SignPageLayout/FormError";
 import PostFormApi from "./PostFormApi";
 
 interface InputValueType {
-  email: string;
   password: string;
+  confirmPassword: string;
 }
 
-const SignIn = () => {
+const ResetPassword = () => {
   const [inputValues, setInputValues] = useState<InputValueType>({
-    email: "",
     password: "",
+    confirmPassword: "",
+  });
+
+  const { resetToken } = useParams();
+
+  const { error: userDataError, makeApiRequest } = PostFormApi({
+    method: "PATCH",
+    endPoint: `/resetPassword/${resetToken}`,
+    navigateTo: "/signin",
   });
 
   const onChangInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,13 +33,9 @@ const SignIn = () => {
     }));
   };
 
-  const { error: userDataError, makeApiRequest } = PostFormApi({
-    method: "POST",
-    endPoint: "/login",
-    navigateTo: "/",
-  });
-
-  const submitSiginHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+  const submitResetPasswordHandler = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
 
     await makeApiRequest(inputValues);
@@ -40,32 +43,27 @@ const SignIn = () => {
 
   return (
     <FormLayout
-      heading={"Login"}
-      onSubmitHandler={submitSiginHandler}
+      heading={"Reset Password"}
+      onSubmitHandler={submitResetPasswordHandler}
       userDataError={userDataError}
     >
-      {/* email  */}
-      <InputGroup
-        value={"email"}
-        onChangInputHandler={onChangInputHandler}
-        inputValues={inputValues?.email}
-      />
-
       {/* password  */}
       <PasswordInputGroup
         value="password"
         onChangInputHandler={onChangInputHandler}
         inputValues={inputValues?.password}
       />
+      {/* confirmPassword  */}
+      <PasswordInputGroup
+        value="confirmPassword"
+        onChangInputHandler={onChangInputHandler}
+        inputValues={inputValues?.confirmPassword}
+      />
 
-      <SubmitButton btntext="Sigin in " />
+      <SubmitButton btntext="Submit" />
 
-      <p className="text-center my-4 flex justify-between">
-        <span>
-          {" "}
-          No Account ? <Link to={"/register"}>Create One </Link>{" "}
-        </span>
-        <Link to={`/forgotPassword`}>forgotPassword ?</Link>
+      <p className="text-center my-4">
+        Already have Account ? <Link to={"/signin"}>Sign in </Link>
       </p>
 
       <FormError FormError={userDataError} />
@@ -73,4 +71,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default ResetPassword;

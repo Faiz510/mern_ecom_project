@@ -17,7 +17,7 @@ const Products: FC<ProductProps> = ({ fetchUrl }) => {
     fetchUrl,
     {
       products: [],
-      productLength: 0,
+      productLenght: 0,
       total: 0,
       skip: 0,
       limit: 0,
