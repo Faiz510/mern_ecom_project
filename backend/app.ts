@@ -11,10 +11,17 @@ import helmet from "helmet";
 import ExpressMongoSanitize from "express-mongo-sanitize";
 import hpp from "hpp";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
-app.use(cors());
+const corsOptions = {
+  origin: "http://localhost:5173",
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+
 app.use(helmet());
 
 const limiter = rateLimit({
@@ -28,6 +35,8 @@ const limiter = rateLimit({
 app.use("/api", limiter);
 
 app.use(express.json());
+
+app.use(cookieParser());
 
 app.use(ExpressMongoSanitize());
 

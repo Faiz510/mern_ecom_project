@@ -1,13 +1,24 @@
 import { configureStore } from "@reduxjs/toolkit";
-import CounterSlice from "../Slice/CounterSlice";
+import AuthSlice from "../Slice/AuthSlice";
+import storage from "redux-persist/lib/storage";
+import { persistReducer } from "redux-persist";
+import { combineReducers } from "@reduxjs/toolkit";
 
-export const store = configureStore({
-  reducer: {
-    counter: CounterSlice,
-  },
+const persistConfig = {
+  key: "root",
+  version: 1,
+  storage,
+};
+
+const reducer = combineReducers({
+  auth: AuthSlice,
 });
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
+const persistedReducer = persistReducer(persistConfig, reducer);
+
+export const store = configureStore({
+  reducer: persistedReducer,
+});
+
 export type RootState = ReturnType<typeof store.getState>;
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch;

@@ -45,11 +45,12 @@ export const signup = catchAsyncHandler(async (req, res, next) => {
     role,
   });
 
-  const token = JwtGeneratorHandler(next, user);
+  // const token = JwtGeneratorHandler(next, user);
+
+  // const Requser = userData
 
   res.status(201).json({
     status: "success",
-    token,
     user,
   });
 });
@@ -71,23 +72,21 @@ export const login = catchAsyncHandler(async (req, res, next) => {
 
   const token = JwtGeneratorHandler(next, user);
 
-  res.status(200).json({
-    status: "success",
-    token,
-    user,
-  });
+  res
+    .cookie("jwtToken", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV !== "development",
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+    })
+    .status(200)
+    .json(user);
 });
 
 export const protectRoute = catchAsyncHandler(
   async (req: CustomRequest, res, next) => {
     // getting token
-    let token;
-    if (
-      req.headers.authorization &&
-      req.headers.authorization.toString().startsWith("Bearer")
-    ) {
-      token = req.headers.authorization.toString().split(" ")[1];
-    }
+
+    const token = req.cookies.jwtToken;
     if (!token)
       return next(new AppError("Invalid Token or you are not logged in", 401));
 
@@ -190,12 +189,4 @@ export const ResetPassword = catchAsyncHandler(async (req, res, next) => {
   user.resetPasswordToken = "";
   user.resetPasswordExpiresIn = undefined;
   await user.save();
-
-  // generate Token
-  const token = JwtGeneratorHandler(next, user);
-
-  res.status(200).json({
-    status: "sucess",
-    token,
-  });
 });

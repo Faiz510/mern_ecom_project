@@ -19,6 +19,8 @@ import Register from "./pages/SignPage/Register";
 import SignIn from "./pages/SignPage/SignIn";
 import ForgotPassword from "./pages/SignPage/ForgotPassword";
 import ResetPassword from "./pages/SignPage/ResetPassword";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from "redux-persist";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -37,9 +39,13 @@ const router = createBrowserRouter(
 );
 
 function Root() {
+  let persistor = persistStore(store);
+
   return (
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <PersistGate persistor={persistor}>
+        <RouterProvider router={router} />
+      </PersistGate>
     </Provider>
   );
 }

@@ -30,6 +30,7 @@ const PostFormApi = ({
         method,
         url: `${import.meta.env.VITE_BASE_URL}/api/v1/user${endPoint}`,
         data,
+        withCredentials: true,
       });
       setLoading(false);
       navigate(`${navigateTo}`);

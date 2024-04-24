@@ -8,6 +8,7 @@ import {
   FaBars,
   FaXmark,
   FaAngleUp,
+  FaUserLarge,
 } from "react-icons/fa6";
 import "./Navbar.css";
 import { motion } from "framer-motion";
@@ -17,6 +18,11 @@ import NavCategoriesBtn from "./NavCategoriesBtn";
 import Cart from "./Cart";
 import { useFetchData } from "../../Hooks/useFetchData";
 import { CartApiResponse } from "../Types";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../../Redux/Slice/AuthSlice";
+// import Cookies from "js-cookie";
+import Cookies from "js-cookie";
+import { RootState } from "../../Redux/Store/Store";
 
 const Navbar = () => {
   const [showNavCat, setShowNavCat] = useState<boolean>(false);
@@ -24,11 +30,25 @@ const Navbar = () => {
   const [showNav, setShowNav] = useState<boolean>(false);
   const isSmallDevice = useMediaQuery({ maxWidth: 768 });
 
+  const curUser = useSelector((state: RootState) => state.auth.currentUser);
+  const disptach = useDispatch();
+
+  // console.log(curUser);
+  const onLogoutHandler = () => {
+    Cookies.remove("jwtToken");
+
+    disptach(logoutUser());
+  };
+
   const onShowNavHandler = (): void =>
     setShowNav((prevShowNav) => !prevShowNav);
 
   useEffect(() => {
     if (!isSmallDevice) setShowNav(false);
+
+    // console.log();
+    // const token = Cookie.get("jwtToken");
+    console.log(document.cookie);
   }, [showNav, isSmallDevice]);
   /////////////
 
@@ -164,9 +184,15 @@ const Navbar = () => {
                 <FaMagnifyingGlass />
               </li>
               <li>
-                <Link to={"/register"}>
-                  <FaLock />
-                </Link>
+                {!curUser ? (
+                  <Link to={"/signin"}>
+                    <FaLock />
+                  </Link>
+                ) : (
+                  <a onClick={onLogoutHandler}>
+                    <FaUserLarge />
+                  </a>
+                )}
               </li>
               <li className="group">
                 <span className="group-hover:text-custom-secondary">

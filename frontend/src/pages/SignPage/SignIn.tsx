@@ -6,6 +6,8 @@ import PasswordInputGroup from "./SignPageLayout/PasswordInputGroup";
 import SubmitButton from "./SignPageLayout/SubmitButton";
 import FormError from "./SignPageLayout/FormError";
 import PostFormApi from "./PostFormApi";
+import { setUser } from "../../Redux/Slice/AuthSlice";
+import { useDispatch } from "react-redux";
 
 interface InputValueType {
   email: string;
@@ -17,6 +19,7 @@ const SignIn = () => {
     email: "",
     password: "",
   });
+  const dispatch = useDispatch();
 
   const onChangInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -35,9 +38,12 @@ const SignIn = () => {
   const submitSiginHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await makeApiRequest(inputValues);
-  };
+    const res = await makeApiRequest(inputValues);
 
+    if (res) {
+      dispatch(setUser(res));
+    }
+  };
   return (
     <FormLayout
       heading={"Login"}
