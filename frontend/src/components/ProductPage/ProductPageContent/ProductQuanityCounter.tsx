@@ -1,25 +1,26 @@
 import { FaPlus, FaMinus } from "react-icons/fa6";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../../Redux/Store/Store";
-import { decrement, increment } from "../../../Redux/Slice/CounterSlice";
-import { useState } from "react";
+import React from "react";
 
-const ProductQuanityCounter = () => {
-  const [counterQuantity, setCounterQuantity] = useState<number>(1);
-  const ProductCount = useSelector((state: RootState) => state.counter.value);
-  const dispatch = useDispatch();
+interface ProductQuanityCounterProps {
+  quantityNum: number;
+  setQuantityNum: React.Dispatch<React.SetStateAction<number>>;
+}
 
-  const counterQuantityHandler = (val: string) =>
+const ProductQuanityCounter: React.FC<ProductQuanityCounterProps> = ({
+  quantityNum,
+  setQuantityNum,
+}) => {
+  const counterQuantityHandler = (val: string) => {
     val === "inc"
-      ? setCounterQuantity((pre) => pre + 1)
-      : setCounterQuantity((pre) => (pre > 0 ? pre - 1 : 0));
+      ? setQuantityNum((pre) => pre + 1)
+      : setQuantityNum((pre) => (pre > 1 ? pre - 1 : 1));
+  };
 
   return (
     <div className="flex gap-2 justify-center items-center ">
       <button
         className="cursor-pointer border-[2px] p-1 text-2xl border-custom-primary"
         onClick={() => counterQuantityHandler("dec")}
-        // onClick={() => dispatch(decrement())}
       >
         <FaMinus />
       </button>
@@ -27,14 +28,14 @@ const ProductQuanityCounter = () => {
       <input
         placeholder="1"
         type="number"
-        value={counterQuantity}
+        value={quantityNum}
+        onChange={() => {}}
         className="w-10 text-center focus:outline-none text-[1.2rem] font-medium"
       />
 
       <button
         className="cursor-pointer border-[2px] p-1 text-2xl border-custom-primary"
         onClick={() => counterQuantityHandler("inc")}
-        // onClick={() => dispatch(increment())}
       >
         <FaPlus />
       </button>

@@ -21,6 +21,9 @@ import ForgotPassword from "./pages/SignPage/ForgotPassword";
 import ResetPassword from "./pages/SignPage/ResetPassword";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
+import CartCheckoutPage from "./pages/checkout/CartCheckoutPage";
+import Checkout from "./pages/checkout/Checkout";
+import ProtectLayout from "./components/ProtectedLayout/ProtectLayout";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -34,6 +37,11 @@ const router = createBrowserRouter(
       <Route path="forgotPassword" element={<ForgotPassword />} />
       <Route path="resetPassword/:resetToken" element={<ResetPassword />} />
       <Route path="products/:id" element={<ProductPage />} />
+      {/* protected route  */}
+      <Route element={<ProtectLayout />}>
+        <Route path="cart" element={<CartCheckoutPage />} />
+        <Route path="checkout" element={<Checkout />} />
+      </Route>
     </Route>
   )
 );

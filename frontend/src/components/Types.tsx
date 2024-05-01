@@ -60,6 +60,7 @@ export interface CartProduct {
   price: number;
   thumbnail: string;
   id: string;
+  quantity: number;
 }
 
 export interface CartProductTypes {

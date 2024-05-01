@@ -4,12 +4,14 @@ interface InputGroupProps {
   value: string;
   onChangInputHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;
   inputValues?: string;
+  defVal?: string;
 }
 
 const InputGroup: React.FC<InputGroupProps> = ({
   value,
   onChangInputHandler,
   inputValues,
+  defVal,
 }) => {
   return (
     <div className="mb-4">
@@ -29,6 +31,7 @@ const InputGroup: React.FC<InputGroupProps> = ({
         // onChange={(e) => setFullName(e.target.value)}
         onChange={onChangInputHandler}
         value={inputValues}
+        defaultValue={`${defVal}`}
       />
     </div>
   );

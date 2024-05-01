@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import LogoImg from "../../assests/logo.png";
 import {
   FaMagnifyingGlass,
@@ -8,21 +8,22 @@ import {
   FaBars,
   FaXmark,
   FaAngleUp,
-  FaUserLarge,
 } from "react-icons/fa6";
+import { FaSignOutAlt } from "react-icons/fa";
 import "./Navbar.css";
 import { motion } from "framer-motion";
 import { useMediaQuery } from "react-responsive";
 import Overlay from "../Overlay";
 import NavCategoriesBtn from "./NavCategoriesBtn";
 import Cart from "./Cart";
-import { useFetchData } from "../../Hooks/useFetchData";
-import { CartApiResponse } from "../Types";
-import { useDispatch, useSelector } from "react-redux";
-import { logoutUser } from "../../Redux/Slice/AuthSlice";
-// import Cookies from "js-cookie";
-import Cookies from "js-cookie";
-import { RootState } from "../../Redux/Store/Store";
+import {
+  clearState,
+  currentUser,
+  logoutUser,
+} from "../../Redux/Slice/AuthSlice/AuthSlice";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { fetchCartItem } from "../../Redux/Slice/CartSlice/CartSliceApi";
+import { cartItemsData } from "../../Redux/Slice/CartSlice/cartSlice";
 
 const Navbar = () => {
   const [showNavCat, setShowNavCat] = useState<boolean>(false);
@@ -30,25 +31,31 @@ const Navbar = () => {
   const [showNav, setShowNav] = useState<boolean>(false);
   const isSmallDevice = useMediaQuery({ maxWidth: 768 });
 
-  const curUser = useSelector((state: RootState) => state.auth.currentUser);
-  const disptach = useDispatch();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  // console.log(curUser);
+  const curUser = useAppSelector(currentUser);
+  const cartItems = useAppSelector(cartItemsData);
+
+  const quantites = cartItems?.totalQuantity;
+
   const onLogoutHandler = () => {
-    Cookies.remove("jwtToken");
-
-    disptach(logoutUser());
+    dispatch(logoutUser());
+    dispatch(clearState());
+    navigate("/");
   };
+
+  useEffect(() => {
+    if (curUser) {
+      dispatch(fetchCartItem());
+    }
+  }, [dispatch, curUser]);
 
   const onShowNavHandler = (): void =>
     setShowNav((prevShowNav) => !prevShowNav);
 
   useEffect(() => {
     if (!isSmallDevice) setShowNav(false);
-
-    // console.log();
-    // const token = Cookie.get("jwtToken");
-    console.log(document.cookie);
   }, [showNav, isSmallDevice]);
   /////////////
 
@@ -73,25 +80,7 @@ const Navbar = () => {
   const showNavCatHandler = () => setShowNavCat((preShow) => !preShow);
 
   ///////////////////////////////
-  // const { fetchProductData, productLoading } = FetchProduct("1");
-  const fetchUrl = `${import.meta.env.VITE_BASE_URL}/api/v1/cart`;
-  const parseData = (data: any) => data as CartApiResponse;
-  const { responseData: fetchProductData, fetchLoading } =
-    useFetchData<CartApiResponse>(
-      fetchUrl,
-      {
-        cart: {
-          _id: "",
-          userId: "",
-          products: [],
-          totalAmount: 0,
-          totalProducts: 0,
-          totalQuantity: 0,
-          id: "",
-        },
-      },
-      parseData
-    );
+
   return (
     <>
       <header className="flex justify-between items-center px-8 bg-custom-primary z-50 relative">
@@ -183,6 +172,20 @@ const Navbar = () => {
               <li className="">
                 <FaMagnifyingGlass />
               </li>
+
+              <li className="group">
+                <span className="group-hover:text-custom-secondary flex">
+                  <FaCartShopping />{" "}
+                  {quantites != 0 && curUser && (
+                    <span className="absolute bg-custom-secondary rounded-full w-4 h-4 flex items-center justify-center top-6 ml-[-8px]  text-white font-semibold opacity-95 ">
+                      {quantites}
+                    </span>
+                  )}
+                </span>
+
+                {curUser && <Cart cartItems={cartItems} />}
+              </li>
+
               <li>
                 {!curUser ? (
                   <Link to={"/signin"}>
@@ -190,19 +193,9 @@ const Navbar = () => {
                   </Link>
                 ) : (
                   <a onClick={onLogoutHandler}>
-                    <FaUserLarge />
+                    <FaSignOutAlt />
                   </a>
                 )}
-              </li>
-              <li className="group">
-                <span className="group-hover:text-custom-secondary">
-                  <FaCartShopping />
-                </span>
-
-                <Cart
-                  productLoading={fetchLoading}
-                  fetchProductData={fetchProductData.cart}
-                />
               </li>
             </motion.ul>
           </div>

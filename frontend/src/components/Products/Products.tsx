@@ -40,6 +40,7 @@ const Products: FC<ProductProps> = ({ fetchUrl }) => {
               id={product.id}
               cardList={false}
               avgRating={product.avgRating}
+              key={product.id}
               description={product.description}
             />
           ))

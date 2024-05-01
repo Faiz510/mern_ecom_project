@@ -5,7 +5,7 @@ import { CustomRequest } from "./AuthController";
 
 export const addProductToCart = catchAsyncHandler(
   async (req: CustomRequest, res, next) => {
-    const { products, quantity } = req.body;
+    const { products } = req.body;
     const existingCart = await Cart.findOne({ userId: req.user.id });
 
     // if card exists
@@ -17,13 +17,14 @@ export const addProductToCart = catchAsyncHandler(
 
       if (findItemIndex > -1) {
         // if exist already exist in cart then increase quantity
-        existingCart.products[findItemIndex].quantity += 1;
+        existingCart.products[findItemIndex].quantity +=
+          products[0].quantity ?? 1;
       } else {
         // if product not exists in cart
         existingCart?.products.push(
           ...req.body.products.map((product: CartProduct) => ({
             product: products[0].product, // add product
-            quantity: quantity, // add quantity
+            quantity: products[0].quantity, // add quantity
           }))
         );
       }
@@ -39,6 +40,7 @@ export const addProductToCart = catchAsyncHandler(
         userId: req.user.id,
         products,
       };
+
       const newCart = await Cart.create(cartBody);
 
       res.status(201).json({

@@ -16,13 +16,10 @@ const ProductPage = () => {
   const productId: string | null = id || null;
   const location = useLocation();
 
-  // const { fetchProductData, productLoading } = FetchProduct(productId);
-
   interface SingleProductPageDataType {
     products: Product;
   }
 
-  // console.log(fetchProductData);
   const fetchUrl = `${
     import.meta.env.VITE_BASE_URL
   }/api/v1/products/${productId}`;
@@ -43,7 +40,7 @@ const ProductPage = () => {
           avgRating: 0,
           stock: 0,
           brand: "",
-          category: "",
+          category: [],
           thumbnail: "",
           images: [],
           reviews: [],
@@ -66,9 +63,6 @@ const ProductPage = () => {
         <span> Back to Products </span>
       </Link>
       <section>
-        {/* <div className="text-center my-4">
-        <h2 className="font-normal text-6xl tracking-widest">Product Page</h2>
-      </div> */}
         {!fetchLoading ? (
           <div className="px-4 py-10 my-10 mx-auto w-[90vw] rounded-md lg:grid lg:gap-10 lg:grid-cols-2">
             <ProductImgGallery

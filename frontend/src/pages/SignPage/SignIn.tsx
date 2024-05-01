@@ -6,7 +6,7 @@ import PasswordInputGroup from "./SignPageLayout/PasswordInputGroup";
 import SubmitButton from "./SignPageLayout/SubmitButton";
 import FormError from "./SignPageLayout/FormError";
 import PostFormApi from "./PostFormApi";
-import { setUser } from "../../Redux/Slice/AuthSlice";
+import { setUser } from "../../Redux/Slice/AuthSlice/AuthSlice";
 import { useDispatch } from "react-redux";
 
 interface InputValueType {

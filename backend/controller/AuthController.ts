@@ -190,3 +190,15 @@ export const ResetPassword = catchAsyncHandler(async (req, res, next) => {
   user.resetPasswordExpiresIn = undefined;
   await user.save();
 });
+
+export const logout = catchAsyncHandler(async (req, res, next) => {
+  // Clear the JWT token cookie
+  res.cookie("jwtToken", "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV !== "development",
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+  });
+
+  // Send the JSON response separately
+  res.status(200).json({ status: "success" });
+});

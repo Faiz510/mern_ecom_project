@@ -5,6 +5,7 @@ import {
   restrictToRoute,
   ResetPassword,
   forgotPassword,
+  logout,
 } from "../controller/AuthController";
 import express from "express";
 import {
@@ -28,6 +29,8 @@ router.route("/forgotPassword").post(forgotPassword);
 router.route("/resetPassword/:token").patch(ResetPassword);
 
 router.use(protectRoute); // applied to all routes
+
+router.route("/logout").post(logout);
 
 router
   .route("/updateMyPassword")

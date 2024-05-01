@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import RatingStar from "../../Products/Card/RatingStar";
 import { Product } from "../../Types";
 import { FaCartShopping } from "react-icons/fa6";
@@ -6,6 +6,10 @@ import SocailSharingSection from "./SocailSharingSection.tsx";
 import "./ProductPageContent.css";
 import ProductQuanityCounter from "./ProductQuanityCounter.tsx";
 import { motion } from "framer-motion";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks.ts";
+import { useNavigate } from "react-router-dom";
+import { addCartItem } from "../../../Redux/Slice/CartSlice/CartSliceApi.tsx";
+import { currentUser } from "../../../Redux/Slice/AuthSlice/AuthSlice.tsx";
 
 interface ProductDetProps {
   fetchProductData: Product | null;
@@ -14,7 +18,31 @@ interface ProductDetProps {
 const ProductDetailsSection: React.FC<ProductDetProps> = ({
   fetchProductData,
 }) => {
+  const [quantityNum, setQuantityNum] = useState<number>(1);
   const rating = fetchProductData?.rating ?? 0; // rating undified than return 0 return
+
+  const dispatch = useAppDispatch();
+  const curUser = useAppSelector(currentUser);
+  const navigate = useNavigate();
+
+  const onAddToCartHandler = () => {
+    if (!curUser) return navigate("/signin");
+
+    const cartData = {
+      products: [
+        {
+          product: `${fetchProductData?.id}`,
+          quantity: quantityNum,
+        },
+      ],
+    };
+    dispatch(addCartItem(cartData));
+  };
+
+  const onClickBuyHandler = () => {
+    onAddToCartHandler();
+    setTimeout(() => navigate("/cart"), 100); //
+  };
 
   return (
     <div className="w-[100%] px-4">
@@ -35,8 +63,14 @@ const ProductDetailsSection: React.FC<ProductDetProps> = ({
       </p>
       <div className="w-full text-center flex justify-between items-center my-5 px-4">
         {/* counter  */}
-        <ProductQuanityCounter />
-        <button className="text-black bg-custom-primary  text-[1.2rem] px-6 py-1  rounded-lg">
+        <ProductQuanityCounter
+          quantityNum={quantityNum}
+          setQuantityNum={setQuantityNum}
+        />
+        <button
+          className="text-black bg-custom-primary  text-[1.2rem] px-6 py-1  rounded-lg"
+          onClick={onAddToCartHandler}
+        >
           Add To Cart
         </button>
       </div>
@@ -49,6 +83,7 @@ const ProductDetailsSection: React.FC<ProductDetProps> = ({
           boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
           transition: { type: "spring", stiffness: 500, duration: 0.3 },
         }}
+        onClick={onClickBuyHandler}
       >
         <FaCartShopping />
         <button className="text-center">Buy Now</button>

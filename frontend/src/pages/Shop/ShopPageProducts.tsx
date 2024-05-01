@@ -95,6 +95,7 @@ const ShopPageProducts: React.FC<ProductViewProp> = ({ productView }) => {
         rating={product.rating}
         category={product.category}
         id={product.id}
+        key={product.id}
         cardList={cardListVal}
         avgRating={product.avgRating}
         description={product.description}
