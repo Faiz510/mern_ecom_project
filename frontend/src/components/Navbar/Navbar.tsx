@@ -8,6 +8,7 @@ import {
   FaBars,
   FaXmark,
   FaAngleUp,
+  FaRegHeart,
 } from "react-icons/fa6";
 import { FaSignOutAlt } from "react-icons/fa";
 import "./Navbar.css";
@@ -18,13 +19,10 @@ import NavCategoriesBtn from "./NavCategoriesBtn";
 import Cart from "./Cart";
 import {
   clearState,
-  currentUser,
   logoutUser,
 } from "../../Redux/Slice/AuthSlice/AuthSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { fetchCartItem } from "../../Redux/Slice/CartSlice/CartSliceApi";
-import { cartItemsData } from "../../Redux/Slice/CartSlice/cartSlice";
-
 const Navbar = () => {
   const [showNavCat, setShowNavCat] = useState<boolean>(false);
   // On Mobile
@@ -34,8 +32,9 @@ const Navbar = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const curUser = useAppSelector(currentUser);
-  const cartItems = useAppSelector(cartItemsData);
+  const curUser = useAppSelector((state) => state.auth.currentUser);
+  // const curUser = useAppSelector(currentUser);
+  const cartItems = useAppSelector((state) => state.cart.cart.cart);
 
   const quantites = cartItems?.totalQuantity;
 
@@ -49,7 +48,7 @@ const Navbar = () => {
     if (curUser) {
       dispatch(fetchCartItem());
     }
-  }, [dispatch, curUser]);
+  }, [dispatch, curUser, quantites]);
 
   const onShowNavHandler = (): void =>
     setShowNav((prevShowNav) => !prevShowNav);
@@ -78,7 +77,6 @@ const Navbar = () => {
 
   /////////////
   const showNavCatHandler = () => setShowNavCat((preShow) => !preShow);
-
   ///////////////////////////////
 
   return (
@@ -136,7 +134,6 @@ const Navbar = () => {
                       initial={showNavCat ? { rotate: 180 } : {}}
                       animate={{ rotate: showNavCat ? 0 : 180 }}
                     >
-                      {/* {!showNavCat ? <FaAngleDown /> : <FaAngleUp />} */}
                       <FaAngleUp />
                     </motion.span>
                   </div>
@@ -169,6 +166,14 @@ const Navbar = () => {
             </motion.ul>
 
             <motion.ul className="flex gap-2  nav-link-hover">
+              {curUser && (
+                <li className="text-black">
+                  <Link to={"/wishlist"}>
+                    <FaRegHeart />
+                  </Link>
+                </li>
+              )}
+
               <li className="">
                 <FaMagnifyingGlass />
               </li>
@@ -176,7 +181,7 @@ const Navbar = () => {
               <li className="group">
                 <span className="group-hover:text-custom-secondary flex">
                   <FaCartShopping />{" "}
-                  {quantites != 0 && curUser && (
+                  {quantites !== 0 && cartItems && curUser && (
                     <span className="absolute bg-custom-secondary rounded-full w-4 h-4 flex items-center justify-center top-6 ml-[-8px]  text-white font-semibold opacity-95 ">
                       {quantites}
                     </span>

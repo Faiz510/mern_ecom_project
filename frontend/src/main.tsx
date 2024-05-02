@@ -24,6 +24,7 @@ import { persistStore } from "redux-persist";
 import CartCheckoutPage from "./pages/checkout/CartCheckoutPage";
 import Checkout from "./pages/checkout/Checkout";
 import ProtectLayout from "./components/ProtectedLayout/ProtectLayout";
+import Wishlist from "./pages/Wishlist/Wishlist";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -39,6 +40,7 @@ const router = createBrowserRouter(
       <Route path="products/:id" element={<ProductPage />} />
       {/* protected route  */}
       <Route element={<ProtectLayout />}>
+        <Route path="wishlist" element={<Wishlist />} />
         <Route path="cart" element={<CartCheckoutPage />} />
         <Route path="checkout" element={<Checkout />} />
       </Route>

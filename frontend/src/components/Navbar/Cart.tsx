@@ -6,7 +6,6 @@ import { removeCartItem } from "../../Redux/Slice/CartSlice/CartSliceApi";
 import { Link } from "react-router-dom";
 
 interface CartProps {
-  // productLoading: boolean;
   cartItems: CartTypes | null;
 }
 
@@ -42,8 +41,8 @@ const Cart: React.FC<CartProps> = ({ cartItems }) => {
         </div>
       ))}
       <div className="flex w-full items-center justify-between font-light text-med my-4">
-        <span>Total Items: {cartItems?.totalProducts}</span>
-        <span>Total: ${cartItems?.totalAmount}</span>
+        <span>Total Items: {cartItems?.totalProducts ?? 0}</span>
+        <span>Total: ${cartItems?.totalAmount ?? 0}</span>
       </div>
 
       {cartItems?.products?.length && cartItems?.products?.length !== 0 ? (

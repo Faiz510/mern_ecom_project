@@ -4,17 +4,19 @@ import storage from "redux-persist/lib/storage";
 import { persistReducer } from "redux-persist";
 import { combineReducers } from "@reduxjs/toolkit";
 import CartSlice from "../Slice/CartSlice/cartSlice";
+import WishlistSlice from "../Slice/WishlistSlice/WishlistSlice";
 
 const persistConfig = {
   key: "root",
   version: 1,
   storage,
-  blacklist: ["cart"],
+  blacklist: ["cart", "wishlist"],
 };
 
 const reducer = combineReducers({
   auth: AuthSlice,
   cart: CartSlice,
+  wishlist: WishlistSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);

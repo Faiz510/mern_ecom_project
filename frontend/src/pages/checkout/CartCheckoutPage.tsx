@@ -4,11 +4,10 @@ import { removeCartItem } from "../../Redux/Slice/CartSlice/CartSliceApi";
 import CheckoutCounter from "./CheckoutCounter";
 import CartDetailSection from "./CartDetailSection";
 import { Link } from "react-router-dom";
-import { cartItemsData } from "../../Redux/Slice/CartSlice/cartSlice";
 import { CartProductTypes } from "../../components/Types";
 
 const CartCheckoutPage = () => {
-  const cartItems = useAppSelector(cartItemsData);
+  const cartItems = useAppSelector((state) => state.cart.cart.cart);
 
   const dispatch = useAppDispatch();
 

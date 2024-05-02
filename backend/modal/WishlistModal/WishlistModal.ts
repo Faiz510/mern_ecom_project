@@ -42,7 +42,6 @@ const WishlistSchema: Schema<wishlistDocuments> = new mongoose.Schema(
 WishlistSchema.pre(/^find/, function (this: wishlistDocuments, next) {
   this.populate({
     path: "products.product",
-    select: "title price thumbnail",
   });
   next();
 });

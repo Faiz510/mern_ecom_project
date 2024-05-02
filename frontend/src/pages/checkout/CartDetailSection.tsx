@@ -1,14 +1,13 @@
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 import CartCheckoutRow from "./CartCheckoutRow";
-import { cartItemsData } from "../../Redux/Slice/CartSlice/cartSlice";
 
 interface OncartProps {
   OnCart: boolean;
 }
 
 const CartDetailSection = ({ OnCart }: OncartProps) => {
-  const cartItems = useAppSelector(cartItemsData);
+  const cartItems = useAppSelector((state) => state.cart.cart.cart);
   return (
     <div className="w-[60vw] lg:w-[20vw] mx-auto py-4">
       <div className="bg-gray-50 text-center mt-4 min-h-[300px] px-4">
