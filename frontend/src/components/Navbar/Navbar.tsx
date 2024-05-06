@@ -17,10 +17,7 @@ import { useMediaQuery } from "react-responsive";
 import Overlay from "../Overlay";
 import NavCategoriesBtn from "./NavCategoriesBtn";
 import Cart from "./Cart";
-import {
-  clearState,
-  logoutUser,
-} from "../../Redux/Slice/AuthSlice/AuthSlice";
+import { clearState, logoutUser } from "../../Redux/Slice/AuthSlice/AuthSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { fetchCartItem } from "../../Redux/Slice/CartSlice/CartSliceApi";
 const Navbar = () => {
@@ -77,6 +74,13 @@ const Navbar = () => {
 
   /////////////
   const showNavCatHandler = () => setShowNavCat((preShow) => !preShow);
+
+  const onClicCartIcon = () => {
+    if (!curUser) {
+      navigate("/signin");
+    }
+  };
+
   ///////////////////////////////
 
   return (
@@ -179,7 +183,10 @@ const Navbar = () => {
               </li>
 
               <li className="group">
-                <span className="group-hover:text-custom-secondary flex">
+                <span
+                  className="group-hover:text-custom-secondary flex"
+                  onClick={onClicCartIcon}
+                >
                   <FaCartShopping />{" "}
                   {quantites !== 0 && cartItems && curUser && (
                     <span className="absolute bg-custom-secondary rounded-full w-4 h-4 flex items-center justify-center top-6 ml-[-8px]  text-white font-semibold opacity-95 ">

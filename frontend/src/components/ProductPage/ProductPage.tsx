@@ -1,14 +1,14 @@
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { NavLink, Outlet, useParams } from "react-router-dom";
 import Loader from "../Loader";
 import TrustSection from "../../pages/Home/trustSection/TrustSection";
 import ProductImgGallery from "./ProductPageContent/ProductImgGallery";
 import ProductDetailsSection from "./ProductPageContent/ProductDetailsSection";
 import { useLocation, Link } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa6";
-import SmoothScrollTop from "../SmoothScrollTop/SmoothScrollTop";
 import { useFetchData } from "../../Hooks/useFetchData";
 import { Product } from "../Types";
+import ProductPageBottomSection from "./ProductPageContent/BottomSection/ProductPageBottomSection";
 
 const ProductPage = () => {
   const [imgVal, setImgVal] = useState<number>(0);
@@ -31,7 +31,7 @@ const ProductPage = () => {
       `${fetchUrl}`,
       {
         products: {
-          id: 0,
+          id: "",
           title: "",
           description: "",
           price: 0,
@@ -39,6 +39,7 @@ const ProductPage = () => {
           rating: 0,
           avgRating: 0,
           stock: 0,
+          reviewQuantity: 0,
           brand: "",
           category: [],
           thumbnail: "",
@@ -51,9 +52,8 @@ const ProductPage = () => {
 
   return (
     <>
-      <SmoothScrollTop params={""} />
       <Link
-        to={`..?${location.state.search}`}
+        to={`..?${location.state?.search}`}
         relative="path"
         className="flex justify-start gap-2 items-center text-start mt-5 ml-20 absolute"
       >
@@ -64,7 +64,7 @@ const ProductPage = () => {
       </Link>
       <section>
         {!fetchLoading ? (
-          <div className="px-4 py-10 my-10 mx-auto w-[90vw] rounded-md lg:grid lg:gap-10 lg:grid-cols-2">
+          <div className="px-4 py-10 my-10 mx-auto w-[90vw] rounded-md lg:grid lg:gap-10 lg:grid-cols-2 overflow-x-hidden">
             <ProductImgGallery
               imgVal={imgVal}
               fetchProductData={fetchProductData?.products}
@@ -80,6 +80,8 @@ const ProductPage = () => {
             <Loader />
           </div>
         )}
+
+        <ProductPageBottomSection products={fetchProductData?.products} />
 
         <TrustSection />
       </section>

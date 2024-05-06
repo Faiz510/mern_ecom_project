@@ -11,7 +11,7 @@ const RatingStar: React.FC<RatingStarProps> = ({ rating }) => {
     let number = i + 0.5;
 
     return (
-      <span key={i} className="text-custom-secondary flex">
+      <span key={i} className="text-custom-secondary flex text-2xl">
         {rating >= i + 1 ? (
           <FaStar />
         ) : rating >= number ? (

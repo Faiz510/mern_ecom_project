@@ -1,6 +1,6 @@
 // product
 export interface Product {
-  id: number;
+  id: string;
   title: string;
   description: string;
   price: number;
@@ -12,6 +12,7 @@ export interface Product {
   category: string[];
   thumbnail: string;
   images: string[];
+  reviewQuantity: number;
   reviews?: {
     _id: string;
     product: string;

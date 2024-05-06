@@ -7,7 +7,6 @@ const NavCategoriesBtn = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   // fetch products
   const parseFunctionData = (data: any) => data as CategoriesTypes;
-  // const fetchUrl = "https://dummyjson.com/products/categories";
   const fetchUrl = `${
     import.meta.env.VITE_BASE_URL
   }/api/v1/products/product-categories`;

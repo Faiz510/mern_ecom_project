@@ -5,6 +5,8 @@ import { persistReducer } from "redux-persist";
 import { combineReducers } from "@reduxjs/toolkit";
 import CartSlice from "../Slice/CartSlice/cartSlice";
 import WishlistSlice from "../Slice/WishlistSlice/WishlistSlice";
+import ReviewSlice from "../Slice/ReviewSlice/ReviewSlice";
+import Reviews from "../../components/ProductPage/ProductPageContent/BottomSection/Reviews/Reviews";
 
 const persistConfig = {
   key: "root",
@@ -17,6 +19,7 @@ const reducer = combineReducers({
   auth: AuthSlice,
   cart: CartSlice,
   wishlist: WishlistSlice,
+  reviews: ReviewSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);

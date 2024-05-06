@@ -8,7 +8,6 @@ const Wishlist = () => {
     (state) => state.wishlist.wishlist.wishlist
   );
   const wishlistItemsStatus = useAppSelector((state) => state.wishlist.status);
-  // const curUser = useAppSelector(currentUser);
   const curUser = useAppSelector((state) => state.auth.currentUser);
   const dispatch = useAppDispatch();
 

@@ -25,6 +25,8 @@ import CartCheckoutPage from "./pages/checkout/CartCheckoutPage";
 import Checkout from "./pages/checkout/Checkout";
 import ProtectLayout from "./components/ProtectedLayout/ProtectLayout";
 import Wishlist from "./pages/Wishlist/Wishlist";
+import Reviews from "./components/ProductPage/ProductPageContent/BottomSection/Reviews/Reviews";
+import ProductDescription from "./components/ProductPage/ProductPageContent/BottomSection/ProductDescription";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -37,7 +39,10 @@ const router = createBrowserRouter(
       <Route path="signin" element={<SignIn />} />
       <Route path="forgotPassword" element={<ForgotPassword />} />
       <Route path="resetPassword/:resetToken" element={<ResetPassword />} />
-      <Route path="products/:id" element={<ProductPage />} />
+      <Route path="products/:id" element={<ProductPage />}>
+        <Route index element={<Reviews />} />
+        <Route path="description" element={<ProductDescription />} />
+      </Route>
       {/* protected route  */}
       <Route element={<ProtectLayout />}>
         <Route path="wishlist" element={<Wishlist />} />
