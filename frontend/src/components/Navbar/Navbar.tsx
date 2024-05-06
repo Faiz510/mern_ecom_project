@@ -179,7 +179,9 @@ const Navbar = () => {
               )}
 
               <li className="">
-                <FaMagnifyingGlass />
+                <Link to={"/search"}>
+                  <FaMagnifyingGlass />
+                </Link>
               </li>
 
               <li className="group">

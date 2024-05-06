@@ -11,6 +11,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { addCartItem } from "../../../Redux/Slice/CartSlice/CartSliceApi.tsx";
 import {
   addWishlistItem,
+  fetchWishlistItem,
   removeWishlistItem,
 } from "../../../Redux/Slice/WishlistSlice/wishlistSliceApi.tsx";
 import { FaEdit } from "react-icons/fa";
@@ -67,11 +68,11 @@ const ProductDetailsSection: React.FC<ProductDetProps> = ({
 
   useEffect(() => {
     curWishlist?.products.find((item) => {
-      item.product.id === fetchProductData?.id
+      item.product._id.toString() === id
         ? setWishlistIcon(true)
         : setWishlistIcon(false);
     });
-  }, [curWishlist]);
+  }, [curUser, curWishlist]);
 
   const onRemoveWishlistHandler = () => {
     const matchIndex = curWishlist?.products.findIndex(
@@ -133,7 +134,7 @@ const ProductDetailsSection: React.FC<ProductDetProps> = ({
           />
 
           <div className="flex gap-4 ">
-            {curWishlist && wishlistIcon ? (
+            {wishlistIcon ? (
               <button
                 className="text-custom-secondary text-2xl"
                 onClick={onRemoveWishlistHandler}

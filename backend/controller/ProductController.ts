@@ -6,7 +6,7 @@ import AppError from "../utils/AppError";
 export const AllProducts = catchAsyncHandler(async (req, res, next) => {
   // filtering
   const queryObj = { ...req.query };
-  const excludedFields = ["page", "field", "limit", "sort"];
+  const excludedFields = ["page", "field", "limit", "sort", "title"];
   excludedFields.forEach((el) => delete queryObj[el]);
 
   // Advanced filtering
@@ -33,6 +33,12 @@ export const AllProducts = catchAsyncHandler(async (req, res, next) => {
     query = query.select(fields);
   } else {
     query = query.select("-__v");
+  }
+
+  // search by title
+  if (req.query.title) {
+    const title = req.query.title.toString();
+    query = query.find({ title: { $regex: title, $options: "i" } });
   }
 
   // pagination filter

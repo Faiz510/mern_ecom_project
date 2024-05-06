@@ -27,6 +27,7 @@ import ProtectLayout from "./components/ProtectedLayout/ProtectLayout";
 import Wishlist from "./pages/Wishlist/Wishlist";
 import Reviews from "./components/ProductPage/ProductPageContent/BottomSection/Reviews/Reviews";
 import ProductDescription from "./components/ProductPage/ProductPageContent/BottomSection/ProductDescription";
+import SearchPage from "./pages/searchPage/SearchPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -37,6 +38,7 @@ const router = createBrowserRouter(
       <Route path="products" element={<ShopPage />} />
       <Route path="register" element={<Register />} />
       <Route path="signin" element={<SignIn />} />
+      <Route path="search" element={<SearchPage />} />
       <Route path="forgotPassword" element={<ForgotPassword />} />
       <Route path="resetPassword/:resetToken" element={<ResetPassword />} />
       <Route path="products/:id" element={<ProductPage />}>
