@@ -4,7 +4,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { CategoriesTypes } from "../Types";
 
 const NavCategoriesBtn = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   // fetch products
   const parseFunctionData = (data: any) => data as CategoriesTypes;
   const fetchUrl = `${

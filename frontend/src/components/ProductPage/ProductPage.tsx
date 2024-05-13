@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { NavLink, Outlet, useParams } from "react-router-dom";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
 import Loader from "../Loader";
 import TrustSection from "../../pages/Home/trustSection/TrustSection";
 import ProductImgGallery from "./ProductPageContent/ProductImgGallery";

@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from "react";
-import RatingStar from "../../Products/Card/RatingStar";
-import { Product } from "../../Types";
-import { FaCartShopping, FaRegHeart, FaHeart } from "react-icons/fa6";
-import SocailSharingSection from "./SocailSharingSection.tsx";
-import "./ProductPageContent.css";
-import ProductQuanityCounter from "./ProductQuanityCounter.tsx";
-import { motion } from "framer-motion";
-import { useAppDispatch, useAppSelector } from "../../../app/hooks.ts";
-import { useNavigate, useParams } from "react-router-dom";
-import { addCartItem } from "../../../Redux/Slice/CartSlice/CartSliceApi.tsx";
+import React, { useEffect, useState } from 'react';
+import RatingStar from '../../Products/Card/RatingStar';
+import { Product, WishlistItem } from '../../Types';
+import { FaCartShopping, FaRegHeart, FaHeart } from 'react-icons/fa6';
+import SocailSharingSection from './SocailSharingSection.tsx';
+import './ProductPageContent.css';
+import ProductQuanityCounter from './ProductQuanityCounter.tsx';
+import { motion } from 'framer-motion';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks.ts';
+import { useNavigate, useParams } from 'react-router-dom';
+import { fetchWishlistItem } from '../../../Redux/Slice/WishlistSlice/wishlistSliceApi.tsx';
+import { FaEdit } from 'react-icons/fa';
+import AddReviewModal from './BottomSection/Reviews/AddReviewModal.tsx';
 import {
-  addWishlistItem,
-  fetchWishlistItem,
-  removeWishlistItem,
-} from "../../../Redux/Slice/WishlistSlice/wishlistSliceApi.tsx";
-import { FaEdit } from "react-icons/fa";
-import AddReviewModal from "./BottomSection/Reviews/AddReviewModal.tsx";
-import { fetchReview } from "../../../Redux/Slice/ReviewSlice/ReviewSliceApi.tsx";
+  useAddWishlistItem,
+  useRemoveWishlistItem,
+} from '../../../Hooks/Handlers/WishlistHandlers.tsx';
+import { useAddCartItemHandler } from '../../../Hooks/Handlers/CartHandlers.tsx';
 
 interface ProductDetProps {
   fetchProductData: Product | null;
@@ -28,42 +27,42 @@ const ProductDetailsSection: React.FC<ProductDetProps> = ({
   const [quantityNum, setQuantityNum] = useState<number>(1);
   const [wishlistIcon, setWishlistIcon] = useState<boolean>(false);
   const [showReviewModal, setShowReviewModal] = useState<boolean>(false);
-  const rating = fetchProductData?.avgRating ?? 0; // rating undified than return 0 return
-  const { id } = useParams();
+  const rating = fetchProductData?.avgRating ?? 0;
 
   const dispatch = useAppDispatch();
   const curUser = useAppSelector((state) => state.auth.currentUser);
-  const userReviews = useAppSelector((state) => state.reviews.reviews.reviews);
+  const userReviews = useAppSelector((state) => state.reviews.reviews?.reviews);
   const curWishlist = useAppSelector(
-    (state) => state.wishlist.wishlist.wishlist
+    (state) => state?.wishlist.wishlist?.wishlist,
   );
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  const productId = id ?? '';
+
+  const { removeWishlistItemHandler } = useRemoveWishlistItem({
+    id: productId,
+    setWishlistIcon,
+  });
+
+  const { addWishlishHandler } = useAddWishlistItem({ id: productId });
+
+  const { addCartItemHandler } = useAddCartItemHandler({
+    id: productId,
+    quantity: quantityNum,
+  });
 
   const onAddToCartHandler = () => {
-    if (!curUser) return navigate("/signin");
-
-    const cartData = {
-      products: [
-        {
-          product: `${fetchProductData?.id}`,
-          quantity: quantityNum,
-        },
-      ],
-    };
-    dispatch(addCartItem(cartData));
+    addCartItemHandler();
   };
 
   const onClickBuyHandler = () => {
     onAddToCartHandler();
-    setTimeout(() => navigate("/cart"), 100); //
+    setTimeout(() => navigate('/cart'), 100); //
   };
 
   const onAddToWishlistHandler = () => {
-    const wishData = {
-      products: [{ product: fetchProductData?.id }],
-    };
-
-    dispatch(addWishlistItem(wishData));
+    addWishlishHandler();
   };
 
   useEffect(() => {
@@ -72,7 +71,7 @@ const ProductDetailsSection: React.FC<ProductDetProps> = ({
 
   useEffect(() => {
     const isProductInWishlist = curWishlist?.products.find(
-      (item) => item.product.id === id
+      (item: WishlistItem) => item?.product?.id === id,
     );
 
     if (isProductInWishlist) {
@@ -82,20 +81,13 @@ const ProductDetailsSection: React.FC<ProductDetProps> = ({
     }
   }, [curUser, curWishlist, id]);
 
-  const onRemoveWishlistHandler = (id: string) => {
-    const matchIndex = curWishlist?.products.findIndex(
-      (item) => item.product.id === id
-    );
-    if (matchIndex !== -1) {
-      const id = curWishlist.products[matchIndex].id;
-      dispatch(removeWishlistItem(id));
-      setWishlistIcon(false);
-    }
+  const onRemoveWishlistHandler = () => {
+    removeWishlistItemHandler();
   };
 
   const onAddReviewHandler = () => {
     if (!curUser) {
-      navigate("/signin");
+      navigate('/signin');
     }
     setShowReviewModal(true);
   };
@@ -116,7 +108,7 @@ const ProductDetailsSection: React.FC<ProductDetProps> = ({
             className="text-sm font-light mb-3 flex gap-1 items-center cursor-pointer"
             onClick={onAddReviewHandler}
           >
-            write review <FaEdit />{" "}
+            write review <FaEdit />{' '}
           </span>
         </div>
 
@@ -145,7 +137,7 @@ const ProductDetailsSection: React.FC<ProductDetProps> = ({
             {wishlistIcon ? (
               <button
                 className="text-custom-secondary text-2xl"
-                onClick={() => onRemoveWishlistHandler(id)}
+                onClick={onRemoveWishlistHandler}
               >
                 <FaHeart />
               </button>
@@ -169,8 +161,8 @@ const ProductDetailsSection: React.FC<ProductDetProps> = ({
           whileHover={{
             scale: 1.01,
             opacity: 0.9,
-            boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-            transition: { type: "spring", stiffness: 500, duration: 0.3 },
+            boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+            transition: { type: 'spring', stiffness: 500, duration: 0.3 },
           }}
           onClick={onClickBuyHandler}
         >
@@ -180,9 +172,7 @@ const ProductDetailsSection: React.FC<ProductDetProps> = ({
 
         <SocailSharingSection />
       </div>
-      {showReviewModal && (
-        <AddReviewModal productsId={id} setModal={setShowReviewModal} />
-      )}
+      {showReviewModal && <AddReviewModal setModal={setShowReviewModal} />}
     </>
   );
 };

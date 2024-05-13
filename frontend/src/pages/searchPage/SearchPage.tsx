@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { ProductData } from "../../components/Types";
@@ -60,6 +60,7 @@ const SearchPage = () => {
         {searchData &&
           searchVal !== "" &&
           !isLoading &&
+          searchData?.productLenght &&
           searchData?.productLenght > 0 && (
             <div className="p-4 bg-custom-primary w-[80%] md:w-[40%] mt-4 rounded-lg h-[200px] overflow-y-scroll">
               {searchData?.products.map((product) => {

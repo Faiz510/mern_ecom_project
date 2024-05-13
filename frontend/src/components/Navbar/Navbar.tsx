@@ -30,8 +30,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const curUser = useAppSelector((state) => state.auth.currentUser);
-  // const curUser = useAppSelector(currentUser);
-  const cartItems = useAppSelector((state) => state.cart.cart.cart);
+  const cartItems = useAppSelector((state) => state.cart.cart?.cart);
 
   const quantites = cartItems?.totalQuantity;
 
@@ -197,7 +196,7 @@ const Navbar = () => {
                   )}
                 </span>
 
-                {curUser && <Cart cartItems={cartItems} />}
+                {curUser && cartItems && <Cart cartItems={cartItems} />}
               </li>
 
               <li>

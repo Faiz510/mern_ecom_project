@@ -1,17 +1,16 @@
-import React, { FormEvent, useState } from "react";
-import { FaStar, FaTimes } from "react-icons/fa";
-import { useAppDispatch } from "../../../../../app/hooks";
-import { createReview } from "../../../../../Redux/Slice/ReviewSlice/ReviewSliceApi";
-import { useParams } from "react-router-dom";
+import React, { FormEvent, useState } from 'react';
+import { FaStar, FaTimes } from 'react-icons/fa';
+import { useAppDispatch } from '../../../../../app/hooks';
+import { createReview } from '../../../../../Redux/Slice/ReviewSlice/ReviewSliceApi';
+import { useParams } from 'react-router-dom';
 
 interface addReviewModalProps {
-  productId: string | undefined;
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AddReviewModal = ({ productId, setModal }: addReviewModalProps) => {
+const AddReviewModal = ({ setModal }: addReviewModalProps) => {
   const [rating, setRating] = useState<number>(0);
-  const [reviewText, setReviewText] = useState<string>("");
+  const [reviewText, setReviewText] = useState<string>('');
   const dispatch = useAppDispatch();
   const { id } = useParams();
 
@@ -39,13 +38,13 @@ const AddReviewModal = ({ productId, setModal }: addReviewModalProps) => {
       />
       <FaStar
         className={`text-xl ${
-          star <= rating ? "text-yellow-400" : "text-gray-300"
+          star <= rating ? 'text-yellow-400' : 'text-gray-300'
         }`}
       />
     </label>
   ));
 
-  const onSubmitReview = (e: FormEvent) => {
+  const onSubmitReview = async (e: FormEvent) => {
     e.preventDefault();
 
     const reviewData = {
@@ -53,8 +52,7 @@ const AddReviewModal = ({ productId, setModal }: addReviewModalProps) => {
       rating,
       review: reviewText,
     };
-
-    dispatch(createReview(reviewData));
+    await dispatch(createReview(reviewData));
     setModal(false);
   };
 

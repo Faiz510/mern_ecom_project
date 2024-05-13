@@ -7,7 +7,7 @@ interface OncartProps {
 }
 
 const CartDetailSection = ({ OnCart }: OncartProps) => {
-  const cartItems = useAppSelector((state) => state.cart.cart.cart);
+  const cartItems = useAppSelector((state) => state.cart.cart?.cart);
   return (
     <div className="w-[60vw] lg:w-[20vw] mx-auto py-4">
       <div className="bg-gray-50 text-center mt-4 min-h-[300px] px-4">
@@ -21,16 +21,18 @@ const CartDetailSection = ({ OnCart }: OncartProps) => {
         />
 
         <CartCheckoutRow title={"Shipping"} price={`$${12}`} />
-
-        <CartCheckoutRow
-          title={"Total (tax excl.)"}
-          price={`$${cartItems?.totalAmount + 12}`}
-        />
-
-        <CartCheckoutRow
-          title={"Total (tax incl.)"}
-          price={`$${cartItems?.totalAmount + 12}`}
-        />
+        {cartItems && (
+          <CartCheckoutRow
+            title={"Total (tax excl.)"}
+            price={`$${cartItems?.totalAmount + 12}`}
+          />
+        )}
+        {cartItems && (
+          <CartCheckoutRow
+            title={"Total (tax incl.)"}
+            price={`$${cartItems?.totalAmount + 12}`}
+          />
+        )}
 
         <CartCheckoutRow title={"Taxes"} price={"00.0"} />
 

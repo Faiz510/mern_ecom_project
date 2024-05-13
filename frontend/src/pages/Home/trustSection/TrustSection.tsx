@@ -1,9 +1,7 @@
-import React from "react";
 import { FaShippingFast } from "react-icons/fa";
 import { MdOutlinePayments } from "react-icons/md";
 import { BiSupport } from "react-icons/bi";
 import "./TrustSection.css";
-import { motion } from "framer-motion";
 
 const TrustSection = () => {
   return (

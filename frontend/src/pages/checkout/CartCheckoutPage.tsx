@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { CartProductTypes } from "../../components/Types";
 
 const CartCheckoutPage = () => {
-  const cartItems = useAppSelector((state) => state.cart.cart.cart);
+  const cartItems = useAppSelector((state) => state.cart.cart?.cart);
 
   const dispatch = useAppDispatch();
 

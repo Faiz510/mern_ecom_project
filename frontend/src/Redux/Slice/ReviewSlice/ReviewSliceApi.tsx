@@ -1,28 +1,28 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { sliceApiHandler } from "../SliceApi";
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { sliceApiHandler } from '../SliceApi';
 
 export const fetchReview = createAsyncThunk(
-  "review/fetchReview",
+  'review/fetchReview',
   async (id: string) => {
-    return sliceApiHandler({
-      method: "GET",
+    return await sliceApiHandler({
+      method: 'GET',
       url: `${import.meta.env.VITE_BASE_URL}/api/v1/products/${id}/reviews`,
       withCredentials: true,
     });
-  }
+  },
 );
 
 interface createReviewType {
-  id: string;
+  id: string | undefined;
   review: string;
   rating: number;
 }
 
 export const createReview = createAsyncThunk(
-  "review/createReview",
+  'review/createReview',
   async (data: createReviewType, thankApi) => {
     const res = await sliceApiHandler({
-      method: "POST",
+      method: 'POST',
       url: `${import.meta.env.VITE_BASE_URL}/api/v1/products/${
         data?.id
       }/reviews`,
@@ -30,7 +30,9 @@ export const createReview = createAsyncThunk(
       data: { review: data?.review, rating: data?.rating },
     });
 
-    thankApi.dispatch(fetchReview(data?.id));
+    if (data?.id) {
+      await thankApi.dispatch(fetchReview(data?.id));
+    }
     return res;
-  }
+  },
 );

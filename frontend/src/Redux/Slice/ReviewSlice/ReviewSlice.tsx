@@ -1,8 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createReview, fetchReview } from "./ReviewSliceApi";
+import { ReviewsResponse } from "../../../components/Types";
 
-const initialState = {
-  reviews: [],
+interface reviewIntialStateType {
+  reviews: ReviewsResponse | null;
+  status: "idle" | "loading" | "error";
+}
+
+const initialState: reviewIntialStateType = {
+  reviews: null,
   status: "idle",
 };
 

@@ -17,7 +17,7 @@ const Pagination: React.FC<PaginationProp> = ({
   totalPages,
   getPageNumbers,
 }) => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
   const { pathname } = useLocation();
 
   useEffect(() => {

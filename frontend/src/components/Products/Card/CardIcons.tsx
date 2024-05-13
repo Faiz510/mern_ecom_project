@@ -1,25 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
+import { FaHeart, FaMagnifyingGlass, FaRegHeart } from 'react-icons/fa6';
+import { motion } from 'framer-motion';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { RootState } from '../../../Redux/Store/Store';
+import { fetchWishlistItem } from '../../../Redux/Slice/WishlistSlice/wishlistSliceApi';
+import { IoCartOutline } from 'react-icons/io5';
 import {
-  FaHeart,
-  FaCartShopping,
-  FaMagnifyingGlass,
-  FaRegHeart,
-} from "react-icons/fa6";
-import { motion } from "framer-motion";
-import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { addCartItem } from "../../../Redux/Slice/CartSlice/CartSliceApi";
-import { RootState } from "../../../Redux/Store/Store";
-import { useNavigate } from "react-router-dom";
-import {
-  addWishlistItem,
-  fetchWishlistItem,
-  removeWishlistItem,
-} from "../../../Redux/Slice/WishlistSlice/wishlistSliceApi";
-import { IoCartOutline } from "react-icons/io5";
+  useAddWishlistItem,
+  useRemoveWishlistItem,
+} from '../../../Hooks/Handlers/WishlistHandlers.tsx';
+import { useAddCartItemHandler } from '../../../Hooks/Handlers/CartHandlers.tsx';
 
 const animateIconOnHover = {
   scale: 1.2,
-  transition: { duration: 0.3, stiffness: 500, type: "spring" },
+  transition: { duration: 0.3, stiffness: 500, type: 'spring' },
 };
 
 interface CartIconsProps {
@@ -31,18 +25,30 @@ const CardIcons = ({ id, setShowModal }: CartIconsProps) => {
   const [wishlistIcon, setWishlistIcon] = useState<boolean>(false);
   const curUser = useAppSelector((state: RootState) => state.auth.currentUser);
   const curWishlist = useAppSelector(
-    (state) => state.wishlist.wishlist.wishlist
+    (state) => state?.wishlist?.wishlist?.wishlist,
   );
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+
+  const { removeWishlistItemHandler } = useRemoveWishlistItem({
+    id,
+    setWishlistIcon,
+  });
+  const { addWishlishHandler } = useAddWishlistItem({ id });
+
+  const { addCartItemHandler } = useAddCartItemHandler({ id });
 
   useEffect(() => {
-    dispatch(fetchWishlistItem());
+    const wishlistitemsFetch = () => {
+      if (!curWishlist) return;
+      dispatch(fetchWishlistItem());
+    };
+
+    wishlistitemsFetch();
   }, [curUser, dispatch]);
 
   useEffect(() => {
     const isProductInWishlist = curWishlist?.products.find(
-      (item) => item.product.id === id
+      (item) => item?.product?.id === id,
     );
 
     if (isProductInWishlist) {
@@ -52,46 +58,26 @@ const CardIcons = ({ id, setShowModal }: CartIconsProps) => {
     }
   }, [curUser, curWishlist, id]);
 
-  const onClickHeart = (e: React.MouseEvent<HTMLSpanElement>) => {
+  const onClickIconsHandler = (
+    e: React.MouseEvent<HTMLSpanElement>,
+    val: string,
+  ) => {
     e.preventDefault();
-    if (!curUser) return navigate("/signin");
+    switch (val) {
+      case 'addToCart':
+        addCartItemHandler();
+        break;
+      case 'removeFromWishlist':
+        removeWishlistItemHandler();
+        break;
+      case 'addToWishlist':
+        addWishlishHandler();
+        setWishlistIcon(true);
+        break;
 
-    const wishData = {
-      products: [{ product: id }],
-    };
-    dispatch(addWishlistItem(wishData));
-    setWishlistIcon(true);
-  };
-
-  const onClickCart = (e: React.MouseEvent<HTMLSpanElement>) => {
-    e.preventDefault();
-    if (!curUser) return navigate("/signin");
-
-    const cartData = {
-      products: [
-        {
-          product: id,
-          quantity: 1,
-        },
-      ],
-    };
-    dispatch(addCartItem(cartData));
-  };
-
-  const onClickSearch = (e: React.MouseEvent<HTMLSpanElement>) => {
-    e.preventDefault();
-    setShowModal(true);
-  };
-
-  const onClickRemoveWishlistItem = (e: React.MouseEvent<HTMLSpanElement>) => {
-    e.preventDefault();
-    const matchIndex = curWishlist?.products.findIndex(
-      (item) => item.product.id === id
-    );
-    if (matchIndex !== -1) {
-      const id = curWishlist.products[matchIndex].id;
-      dispatch(removeWishlistItem(id));
-      setWishlistIcon(false);
+      case 'onSearch':
+        setShowModal(true);
+        break;
     }
   };
 
@@ -102,7 +88,7 @@ const CardIcons = ({ id, setShowModal }: CartIconsProps) => {
           <motion.span
             whileHover={animateIconOnHover}
             className="text-green-700 text-2xl"
-            onClick={(e) => onClickRemoveWishlistItem(e)}
+            onClick={(e) => onClickIconsHandler(e, 'removeFromWishlist')}
           >
             <FaHeart className="card-icon" />
           </motion.span>
@@ -110,7 +96,7 @@ const CardIcons = ({ id, setShowModal }: CartIconsProps) => {
           <motion.span
             whileHover={animateIconOnHover}
             className="text-2xl"
-            onClick={(e) => onClickHeart(e)}
+            onClick={(e) => onClickIconsHandler(e, 'addToWishlist')}
           >
             <FaRegHeart className="card-icon" />
           </motion.span>
@@ -118,10 +104,9 @@ const CardIcons = ({ id, setShowModal }: CartIconsProps) => {
 
         <motion.span
           whileHover={animateIconOnHover}
-          onClick={(e) => onClickCart(e)}
           className="text-2xl"
+          onClick={(e) => onClickIconsHandler(e, 'addToCart')}
         >
-          {/* <FaCartShopping className="card-icon" /> */}
           <IoCartOutline className="card-icon" />
         </motion.span>
       </motion.div>
@@ -129,7 +114,7 @@ const CardIcons = ({ id, setShowModal }: CartIconsProps) => {
       <motion.span
         className="hidden items-center justify-center absolute left-[45%] top-[45%] group-hover:z-30 group-hover:flex "
         whileHover={animateIconOnHover}
-        onClick={(e) => onClickSearch(e)}
+        onClick={(e) => onClickIconsHandler(e, 'onSearch')}
       >
         <FaMagnifyingGlass className="card-icon" />
       </motion.span>

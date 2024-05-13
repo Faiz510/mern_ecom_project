@@ -1,9 +1,4 @@
-import {
-  createAsyncThunk,
-  createSelector,
-  createSlice,
-} from "@reduxjs/toolkit";
-import { RootState } from "../../Store/Store";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { sliceApiHandler } from "../SliceApi";
 
 export const logoutUser = createAsyncThunk("auth/logout", async () => {
@@ -27,7 +22,7 @@ const AuthSlice = createSlice({
       state.currentUser = actions.payload;
     },
     clearState(state) {
-      return (state = initialState);
+      state.currentUser = initialState.currentUser;
     },
   },
   extraReducers(builder) {
@@ -39,6 +34,5 @@ const AuthSlice = createSlice({
 });
 
 export const { setUser, clearState } = AuthSlice.actions;
-
 
 export default AuthSlice.reducer;

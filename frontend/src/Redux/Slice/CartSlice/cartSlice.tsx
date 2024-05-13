@@ -1,9 +1,14 @@
-import { createSelector, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { fetchCartItem, addCartItem, removeCartItem } from "./CartSliceApi";
-import { RootState } from "../../Store/Store";
+import { CartApiResponse } from "../../../components/Types";
 
-const initialState = {
-  cart: {},
+interface CartState {
+  cart: CartApiResponse | null;
+  status: "idle" | "loading" | "error";
+}
+
+const initialState: CartState = {
+  cart: null,
   status: "idle",
 };
 
@@ -34,6 +39,5 @@ const cartSlice = createSlice({
       });
   },
 });
-
 
 export default cartSlice.reducer;

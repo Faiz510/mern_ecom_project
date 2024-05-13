@@ -1,10 +1,15 @@
-import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { addWishlistItem, fetchWishlistItem } from "./wishlistSliceApi";
-import { RootState } from "../../Store/Store";
+import { WishlistResponse } from "../../../components/Types";
 
-const initialState = {
+interface wishlistInitialState {
+  status: "idle" | "loading" | "error";
+  wishlist: WishlistResponse | null;
+}
+
+const initialState: wishlistInitialState = {
   status: "idle",
-  wishlist: [],
+  wishlist: null,
 };
 
 const wishlistSlice = createSlice({

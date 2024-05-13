@@ -38,6 +38,11 @@ export interface ProductData {
   limit?: number;
 }
 
+export interface CategoriesTypes {
+  categories: string[];
+}
+
+//////cart
 export interface CardProps {
   id: string;
   title: string;
@@ -50,11 +55,7 @@ export interface CardProps {
   cardList: boolean;
   description: string;
 }
-
-export interface CategoriesTypes {
-  categories: string[];
-}
-
+////// nav cart
 export interface CartProduct {
   _id: string;
   title: string;
@@ -85,4 +86,47 @@ export interface CartTypes {
 export interface CartApiResponse {
   status?: string;
   cart: CartTypes;
+}
+
+//////////////Review
+
+export interface Review {
+  _id: string;
+  product: string;
+  userId: {
+    _id: string;
+    username: string;
+    email: string;
+  };
+  review: string;
+  rating: number;
+  createdAt: string;
+  __v: number;
+  id: string;
+}
+
+export interface ReviewsResponse {
+  status: string;
+  reviews: Review[];
+}
+
+///////////////Wishlist
+
+export interface WishlistItem {
+  product: Product;
+  _id: string;
+  id: string;
+}
+
+export interface Wishlist {
+  _id: string;
+  userId: string;
+  products: WishlistItem[];
+  __v: number;
+  id: string;
+}
+
+export interface WishlistResponse {
+  status?: string;
+  wishlist: Wishlist;
 }

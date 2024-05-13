@@ -1,30 +1,30 @@
-import { motion, useTransform, useScroll } from "framer-motion";
-import { useEffect, useState } from "react";
-import "./HeroSection.css";
-import AngleBtns from "./AngleBtns.tsx";
-import { ANIMATION_VARIANTS } from "./Animate.tsx";
-import { Link } from "react-router-dom";
+import { motion, useTransform, useScroll } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import './HeroSection.css';
+import AngleBtns from './AngleBtns.tsx';
+import { ANIMATION_VARIANTS } from './Animate.tsx';
+import { Link } from 'react-router-dom';
 
 const HeroArr = [
   {
     id: 1,
-    title: "heading 1",
-    subtitle: "Subtiltle no 1",
-    description: "this is description no 1",
-    img: "https://images.pexels.com/photos/305821/pexels-photo-305821.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    title: 'Home Decor',
+    subtitle: 'Online Shoping',
+    description: 'SUMMER SALE Upto 60% Off',
+    img: 'https://images.pexels.com/photos/305821/pexels-photo-305821.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
   },
   {
     id: 2,
-    title: "heading 2",
-    subtitle: "Subtiltle no 2",
-    description: "this is description no 2",
-    img: "https://images.pexels.com/photos/322338/pexels-photo-322338.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    title: 'One Stop Shop',
+    subtitle: 'Decorating Your Home',
+    description: 'Decorate Your Room in Style',
+    img: 'https://images.pexels.com/photos/322338/pexels-photo-322338.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
   },
 ];
 
 const HeroSection = () => {
   const [indNum, setIndNum] = useState<number>(0);
-  const [angleBtnval, setAngleBtnVal] = useState<string>("");
+  const [angleBtnval, setAngleBtnVal] = useState<string>('');
 
   // fomer motion animation on scroll
   const { scrollY } = useScroll();
@@ -32,25 +32,25 @@ const HeroSection = () => {
   const scrollScale = useTransform(
     scrollY,
     [0, 200, 400, 500],
-    [1, 1.2, 1.3, 1.4]
+    [1, 1.2, 1.3, 1.4],
   );
   const scrollLeft = useTransform(scrollY, [0, 200, 400], [0, 150, 200]);
   const scrollTop = useTransform(scrollY, [0, 200, 300], [0, 30, 60]);
 
   useEffect(() => {
     // onclick left and right btn logic
-    if (angleBtnval === "left") {
+    if (angleBtnval === 'left') {
       setIndNum((prev) => (prev === 0 ? HeroArr.length - 1 : prev - 1));
-      setAngleBtnVal("");
-    } else if (angleBtnval === "right") {
+      setAngleBtnVal('');
+    } else if (angleBtnval === 'right') {
       setIndNum((prev) => (prev === HeroArr.length - 1 ? 0 : prev + 1));
-      setAngleBtnVal("");
+      setAngleBtnVal('');
     }
 
     // click change slide after sec
     const intervalId = setInterval(() => {
       setIndNum((prev) => (prev >= HeroArr.length - 1 ? 0 : prev + 1));
-      setAngleBtnVal("");
+      setAngleBtnVal('');
     }, 5000);
     return () => clearInterval(intervalId);
   }, [angleBtnval]);
@@ -99,7 +99,7 @@ const HeroSection = () => {
             whileHover={ANIMATION_VARIANTS.AnimateWithHover}
             className="w-[7.5rem] text-center"
           >
-            <Link to={"/products"} className="btn-cl">
+            <Link to={'/products'} className="btn-cl">
               Shop Now
             </Link>
           </motion.div>

@@ -1,4 +1,3 @@
-import React from "react";
 import LogoImg from "../../assests/logo.png";
 import "./Footer.css";
 import ContactInfoCol from "./ContactInfoCol";

@@ -8,7 +8,7 @@ interface ActiveFiltersProps {
 }
 
 const ActiveFilters: React.FC<ActiveFiltersProps> = ({ handler }) => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const searchCategory = searchParams.get("category");
   const searchRating = searchParams.get("avgRating");

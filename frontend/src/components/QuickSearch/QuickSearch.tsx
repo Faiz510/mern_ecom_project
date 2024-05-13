@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from "react";
-import Overlay from "../Overlay";
-import axios from "axios";
-import { Product } from "../Types";
-import { AnimatePresence, motion } from "framer-motion";
-import { FaCartShopping, FaHeart, FaRegHeart, FaXmark } from "react-icons/fa6";
-import RatingStar from "../Products/Card/RatingStar";
-import SocailSharingSection from "../ProductPage/ProductPageContent/SocailSharingSection";
-import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { addCartItem } from "../../Redux/Slice/CartSlice/CartSliceApi";
+import React, { useEffect, useState } from 'react';
+import Overlay from '../Overlay';
+import axios from 'axios';
+import { Product, WishlistItem } from '../Types';
+import { AnimatePresence, motion } from 'framer-motion';
+import { FaCartShopping, FaHeart, FaRegHeart, FaXmark } from 'react-icons/fa6';
+import RatingStar from '../Products/Card/RatingStar';
+import SocailSharingSection from '../ProductPage/ProductPageContent/SocailSharingSection';
+import { useNavigate } from 'react-router-dom';
+import { useAppSelector } from '../../app/hooks';
+import ProductQuanityCounter from '../ProductPage/ProductPageContent/ProductQuanityCounter';
 import {
-  addWishlistItem,
-  removeWishlistItem,
-} from "../../Redux/Slice/WishlistSlice/wishlistSliceApi";
-import ProductQuanityCounter from "../ProductPage/ProductPageContent/ProductQuanityCounter";
+  useAddWishlistItem,
+  useRemoveWishlistItem,
+} from '../../Hooks/Handlers/WishlistHandlers.tsx';
+import { useAddCartItemHandler } from '../../Hooks/Handlers/CartHandlers.tsx';
 
 interface QuickSearchProps {
   id: string;
@@ -27,7 +27,7 @@ const QuickSearch = ({
   showSearchModal,
 }: QuickSearchProps) => {
   const [fetchProductData, setFetchProductData] = useState<Product | null>(
-    null
+    null,
   );
   const [quantityNum, setQuantityNum] = useState<number>(1);
   const [wishlistIcon, setWishlistIcon] = useState<boolean>(false);
@@ -35,11 +35,22 @@ const QuickSearch = ({
   const curUser = useAppSelector((state) => state.auth.currentUser);
   const [imgVal, setImgVal] = useState<number>(0);
 
+  const userReviews = useAppSelector((state) => state.reviews.reviews?.reviews);
+  const curWishlist = useAppSelector(
+    (state) => state?.wishlist?.wishlist?.wishlist,
+  );
+  const navigate = useNavigate();
+
+  const { addCartItemHandler } = useAddCartItemHandler({
+    id,
+    quantity: quantityNum,
+  });
+
   useEffect(() => {
     const ApiGetProduct = async (id: string) => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}/api/v1/products/${id}`
+          `${import.meta.env.VITE_BASE_URL}/api/v1/products/${id}`,
         );
         const { data } = response;
         setFetchProductData(data?.products);
@@ -52,44 +63,24 @@ const QuickSearch = ({
     ApiGetProduct(id);
   }, [id]);
 
-  const userReviews = useAppSelector((state) => state.reviews.reviews.reviews);
-  const curWishlist = useAppSelector(
-    (state) => state.wishlist.wishlist.wishlist
-  );
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-
   const onAddToCartHandler = () => {
-    if (!curUser) return navigate("/signin");
-
-    const cartData = {
-      products: [
-        {
-          product: `${id}`,
-          quantity: quantityNum,
-        },
-      ],
-    };
-    dispatch(addCartItem(cartData));
+    addCartItemHandler();
   };
 
   const onClickBuyHandler = () => {
     onAddToCartHandler();
-    setTimeout(() => navigate("/cart"), 100); //
+    setTimeout(() => navigate('/cart'), 100); //
   };
 
-  const onAddToWishlistHandler = () => {
-    if (!curUser) return navigate("/signin");
-    const wishData = {
-      products: [{ product: id }],
-    };
+  const { addWishlishHandler } = useAddWishlistItem({ id });
 
-    dispatch(addWishlistItem(wishData));
+  const onAddToWishlistHandler = () => {
+    addWishlishHandler();
   };
 
   useEffect(() => {
     const isProductInWishlist = curWishlist?.products.find(
-      (item) => item.product.id === id
+      (item: WishlistItem) => item?.product?.id === id,
     );
 
     if (isProductInWishlist) {
@@ -99,15 +90,13 @@ const QuickSearch = ({
     }
   }, [curUser, curWishlist, id]);
 
+  const { removeWishlistItemHandler } = useRemoveWishlistItem({
+    id,
+    setWishlistIcon,
+  });
+
   const onRemoveWishlistHandler = () => {
-    const matchIndex = curWishlist?.products.findIndex(
-      (item) => item.product.id === fetchProductData?.id
-    );
-    if (matchIndex !== -1) {
-      const id = curWishlist.products[matchIndex].id;
-      dispatch(removeWishlistItem(id));
-      setWishlistIcon(false);
-    }
+    removeWishlistItemHandler();
   };
 
   return (
@@ -237,9 +226,9 @@ const QuickSearch = ({
                   whileHover={{
                     scale: 1.01,
                     opacity: 0.9,
-                    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
                     transition: {
-                      type: "spring",
+                      type: 'spring',
                       stiffness: 500,
                       duration: 0.3,
                     },

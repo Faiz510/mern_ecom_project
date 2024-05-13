@@ -4,14 +4,19 @@ import { fetchWishlistItem } from "../../Redux/Slice/WishlistSlice/wishlistSlice
 import Card from "../../components/Products/Card/Card";
 const Wishlist = () => {
   const wishlistItems = useAppSelector(
-    (state) => state.wishlist.wishlist?.wishlist
+    (state) => state?.wishlist?.wishlist?.wishlist
   );
   const curUser = useAppSelector((state) => state.auth.currentUser);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchWishlistItem());
-  }, [dispatch, curUser]);
+    const wishlistitemsFetch = () => {
+      if (!wishlistItems) return;
+      dispatch(fetchWishlistItem());
+    };
+
+    wishlistitemsFetch();
+  }, [curUser, dispatch]);
 
   return (
     <section className="flex justify-center items-center min-h-[500px] my-10 py-10">

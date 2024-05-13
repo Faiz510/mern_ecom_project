@@ -7,7 +7,7 @@ interface RatingStarProps {
 }
 
 const RatingStar: React.FC<RatingStarProps> = ({ rating }) => {
-  const ratingNum = Array.from({ length: 5 }, (el, i) => {
+  const ratingNum = Array.from({ length: 5 }, (_, i) => {
     let number = i + 0.5;
 
     return (

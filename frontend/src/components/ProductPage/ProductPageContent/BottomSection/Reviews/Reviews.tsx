@@ -1,31 +1,34 @@
-import { useOutletContext, useParams } from "react-router-dom";
-import { Product } from "../../../../Types";
-import RatingStar from "../../../../Products/Card/RatingStar";
-import moment from "moment";
-import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
-import { fetchReview } from "../../../../../Redux/Slice/ReviewSlice/ReviewSliceApi";
-import { useEffect } from "react";
-import { RootState } from "../../../../../Redux/Store/Store";
+import { useOutletContext, useParams } from 'react-router-dom';
+import { Product } from '../../../../Types';
+import RatingStar from '../../../../Products/Card/RatingStar';
+import moment from 'moment';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import { fetchReview } from '../../../../../Redux/Slice/ReviewSlice/ReviewSliceApi';
+import { useEffect } from 'react';
+import { RootState } from '../../../../../Redux/Store/Store';
 
 const Reviews = () => {
   const context: Product = useOutletContext();
   const { id } = useParams();
 
   const reviewData = useAppSelector(
-    (state: RootState) => state?.reviews?.reviews.reviews
+    (state: RootState) => state?.reviews?.reviews?.reviews,
   );
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (id) {
-      dispatch(fetchReview(id));
-    }
+    const showReviewsFunction = async () => {
+      if (id) {
+        await dispatch(fetchReview(id));
+      }
+      showReviewsFunction();
+    };
   }, [dispatch]);
 
   return (
     <section className="min-h-52">
       {context?.reviewQuantity !== 0 ? (
-        reviewData.map((review) => (
+        reviewData?.map((review) => (
           <div className="flex flex-col gap-1 my-6" key={review.id}>
             <div className="flex gap-2 items-center">
               <RatingStar rating={review?.rating} />

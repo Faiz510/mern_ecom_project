@@ -65,8 +65,14 @@ const ShopPageProducts: React.FC<ProductViewProp> = ({ productView }) => {
   //////////// pagination /////////////
 
   useEffect(() => {
-    setTotalPages(Math.ceil(responseData.total / responseData.limit));
-  }, [currentPage, responseData.total]);
+    if (
+      responseData &&
+      responseData.total !== undefined &&
+      responseData.limit !== undefined
+    ) {
+      setTotalPages(Math.ceil(responseData.total / responseData.limit));
+    }
+  }, [currentPage, responseData]);
 
   useEffect(() => {
     if (searchCategory || searchPrice || searchRating) {
@@ -129,23 +135,21 @@ const ShopPageProducts: React.FC<ProductViewProp> = ({ productView }) => {
             transition: { duration: 0.8, type: "just", stiffness: 800 },
           }}
         >
-          {/* if product view = grid show grid else show list */}
-          {!fetchLoading && fetchError == "" ? (
-            productView === "grid" ? (
-              responseData.products?.map((product) =>
-                renderedCard(product, false)
-              )
-            ) : (
-              responseData.products?.map((product) =>
-                renderedCard(product, true)
-              )
-            )
-          ) : fetchError || responseData?.productLenght === 0 ? (
+          {fetchLoading ? (
+            <Loader />
+          ) : fetchError ? (
             <div className="w-full my-10 font-semibold text-4xl text-center">
-              <h3>Noting to show</h3>
+              <h3>Nothing to show</h3>
+            </div>
+          ) : responseData?.productLenght === 0 ? (
+            <div className="w-full my-10 font-semibold text-4xl text-center">
+              <h3>Nothing to show</h3>
             </div>
           ) : (
-            <Loader />
+            // if product view = grid show grid else show list
+            responseData.products?.map((product) =>
+              renderedCard(product, productView !== "grid")
+            )
           )}
         </motion.div>
       </section>
