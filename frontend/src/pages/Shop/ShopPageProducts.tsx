@@ -43,11 +43,11 @@ const ShopPageProducts: React.FC<ProductViewProp> = ({ productView }) => {
   }&${searchParams.has("sort") ? `sort=${searchByOrder}` : ""}`;
 
   const fields =
-    "_id,category,title,price,avgRating,discountPercentage,description ,thumbnail";
+    "_id,category,title,price,avgRating,discountPercentage,description,thumbnail,createdAt";
   const parseFunctionData = (data: any) => data as ProductData;
   const fetchUrl = `${
     import.meta.env.VITE_BASE_URL
-  }/api/v1/products?field=${fields}&page=${currentPage}&limit=6${
+  }/api/v1/products?field=${fields}&page=${currentPage}&limit=9${
     newParams ? `&${newParams}` : ""
   }`;
   const { responseData, fetchLoading, fetchError } = useFetchData<ProductData>(

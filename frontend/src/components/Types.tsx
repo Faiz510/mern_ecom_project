@@ -32,14 +32,14 @@ export interface Product {
 // products
 export interface ProductData {
   products: Product[];
-  productLenght: number;
-  total: number;
-  skip: number;
-  limit: number;
+  productLenght?: number;
+  total?: number;
+  skip?: number;
+  limit?: number;
 }
 
 export interface CardProps {
-  id: number;
+  id: string;
   title: string;
   img: string;
   price: number;

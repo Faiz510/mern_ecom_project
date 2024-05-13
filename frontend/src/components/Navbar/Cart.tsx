@@ -17,13 +17,13 @@ const Cart: React.FC<CartProps> = ({ cartItems }) => {
   };
 
   return (
-    <div className="hidden group-hover:flex absolute top-[2.9rem] ml-[-12rem] bg-custom-primary pt-10 px-5 group-hover:transition-all group-hover:duration-300 w-[300px] pb-4 mx-auto flex-col">
+    <div className="hidden group-hover:flex absolute top-[2.9rem] ml-[-12rem] bg-custom-primary pt-10 px-5 group-hover:transition-all group-hover:duration-300 w-[300px] pb-4 mx-auto flex-col ">
       {/* Content to be displayed on hover */}
       {cartItems?.products.length === 0 && <div>Empty Cart</div>}
       {cartItems?.products.map((product) => (
         <div
           key={product.id}
-          className="flex w-full items-center justify-between font-light text-med my-4 bg-white p-2 rounded-lg relative"
+          className="flex w-full items-center justify-between font-light text-med my-4 bg-white px-2 py-1 rounded-lg relative"
         >
           <div className="flex items-center justify-center gap-2">
             <img src={product.product.thumbnail} className="w-20" alt="" />
@@ -40,7 +40,8 @@ const Cart: React.FC<CartProps> = ({ cartItems }) => {
           </span>
         </div>
       ))}
-      <div className="flex w-full items-center justify-between font-light text-med my-4">
+
+      <div className="flex w-full items-center justify-between font-light text-med my-4 ">
         <span>Total Items: {cartItems?.totalProducts ?? 0}</span>
         <span>Total: ${cartItems?.totalAmount ?? 0}</span>
       </div>
@@ -48,7 +49,7 @@ const Cart: React.FC<CartProps> = ({ cartItems }) => {
       {cartItems?.products?.length && cartItems?.products?.length !== 0 ? (
         <Link
           to="/cart"
-          className="w-full bg-custom-secondary py-2 rounded-lg hover:text-black text-center"
+          className="w-full bg-custom-secondary py-2 rounded-lg hover:text-black text-center "
         >
           Checkout
         </Link>

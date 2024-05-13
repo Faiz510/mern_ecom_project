@@ -33,7 +33,7 @@ const SearchPage = () => {
 
   return (
     <div>
-      <div className="flex flex-col justify-center items-center min-h-[600px]">
+      <div className="flex flex-col justify-center items-center min-h-[600px] ">
         <div className="flex justify-center items-center gap-2 bg-custom-primary py-4 px-6 rounded-lg w-[80%] md:w-[40%]">
           <input
             type="text"
@@ -60,8 +60,8 @@ const SearchPage = () => {
         {searchData &&
           searchVal !== "" &&
           !isLoading &&
-          searchData.productLenght > 0 && (
-            <div className="p-4 bg-custom-primary w-[80%] md:w-[40%] mt-4 rounded-lg ">
+          searchData?.productLenght > 0 && (
+            <div className="p-4 bg-custom-primary w-[80%] md:w-[40%] mt-4 rounded-lg h-[200px] overflow-y-scroll">
               {searchData?.products.map((product) => {
                 return (
                   <Link

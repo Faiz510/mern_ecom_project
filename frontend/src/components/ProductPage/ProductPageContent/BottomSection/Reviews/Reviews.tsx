@@ -23,7 +23,7 @@ const Reviews = () => {
   }, [dispatch]);
 
   return (
-    <section>
+    <section className="min-h-52">
       {context?.reviewQuantity !== 0 ? (
         reviewData.map((review) => (
           <div className="flex flex-col gap-1 my-6" key={review.id}>

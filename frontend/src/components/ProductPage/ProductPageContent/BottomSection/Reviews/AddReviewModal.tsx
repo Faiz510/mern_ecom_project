@@ -60,9 +60,9 @@ const AddReviewModal = ({ productId, setModal }: addReviewModalProps) => {
 
   return (
     <>
-      <div className="fixed w-full top-0 left-0  h-full flex items-center justify-center z-50">
+      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
         <form
-          className="text-center bg-white px-10 py-6 rounded-xl relative"
+          className="text-center bg-white px-10 py-6 rounded-xl relative w-[80vw] md:w-[50vw]"
           onSubmit={onSubmitReview}
         >
           <button

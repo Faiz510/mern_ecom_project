@@ -18,7 +18,7 @@ const CartCheckoutPage = () => {
   const thClass =
     "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider";
   return (
-    <section className="overflow-x-hidden flex flex-wrap min-h-[350px] w-[95vw] mx-auto">
+    <section className="overflow-hidden flex flex-wrap min-h-[350px] w-[95vw] mx-auto">
       <div>
         <table className="w-[70vw]  divide-y divide-gray-200 mx-auto">
           <thead className="bg-gray-50 opacity-0 md:opacity-100">

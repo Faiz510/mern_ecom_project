@@ -67,16 +67,24 @@ const ProductDetailsSection: React.FC<ProductDetProps> = ({
   };
 
   useEffect(() => {
-    curWishlist?.products.find((item) => {
-      item.product._id.toString() === id
-        ? setWishlistIcon(true)
-        : setWishlistIcon(false);
-    });
-  }, [curUser, curWishlist]);
+    dispatch(fetchWishlistItem());
+  }, [dispatch, curUser]);
 
-  const onRemoveWishlistHandler = () => {
+  useEffect(() => {
+    const isProductInWishlist = curWishlist?.products.find(
+      (item) => item.product.id === id
+    );
+
+    if (isProductInWishlist) {
+      setWishlistIcon(true);
+    } else {
+      setWishlistIcon(false);
+    }
+  }, [curUser, curWishlist, id]);
+
+  const onRemoveWishlistHandler = (id: string) => {
     const matchIndex = curWishlist?.products.findIndex(
-      (item) => item.product.id === fetchProductData?.id
+      (item) => item.product.id === id
     );
     if (matchIndex !== -1) {
       const id = curWishlist.products[matchIndex].id;
@@ -137,7 +145,7 @@ const ProductDetailsSection: React.FC<ProductDetProps> = ({
             {wishlistIcon ? (
               <button
                 className="text-custom-secondary text-2xl"
-                onClick={onRemoveWishlistHandler}
+                onClick={() => onRemoveWishlistHandler(id)}
               >
                 <FaHeart />
               </button>
@@ -173,10 +181,7 @@ const ProductDetailsSection: React.FC<ProductDetProps> = ({
         <SocailSharingSection />
       </div>
       {showReviewModal && (
-        <AddReviewModal
-          productsId={fetchProductData?.id}
-          setModal={setShowReviewModal}
-        />
+        <AddReviewModal productsId={id} setModal={setShowReviewModal} />
       )}
     </>
   );

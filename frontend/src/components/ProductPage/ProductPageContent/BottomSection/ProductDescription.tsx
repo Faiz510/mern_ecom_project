@@ -5,7 +5,7 @@ const ProductDescription = () => {
   const context: Product = useOutletContext();
 
   return (
-    <div className="text-med font-light tracking-tighter">
+    <div className="text-med font-light tracking-wider w-[50vw] ml-0">
       {context?.description}{" "}
     </div>
   );
